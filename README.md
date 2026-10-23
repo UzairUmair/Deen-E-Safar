@@ -1,55 +1,41 @@
 # Deen e Safar
 
-A responsive, browser-local Islamic learning prototype built with Next.js App Router, React, TypeScript, Tailwind CSS, Motion, and Lucide.
+A functional Islamic reading and learning website built with Next.js, React, TypeScript, Motion, Lucide, and Adhan. Static export with browser-local progress.
 
 ## Run
 
-```sh
-npm install
-npm run dev
-```
+Run `npm install`, `npm run dev`, `npm run verify`, and `npm run build`. Development URL: http://127.0.0.1:3000. Production output: `out/`. Hosting identity is retained in `.openai/hosting.json`.
 
-Open http://127.0.0.1:3000. `npm run build` creates a static export in `out/`. `npm run typecheck` checks TypeScript.
+## Features
 
-## Prototype scope
+- Complete Quran: 114 surahs / 6,236 ayahs, 30 juz entry points, Arabic, English and Urdu translations and footnotes. Full-text search, bookmarks, saved reading positions, text sizing, focus mode, copying, sequential verse audio.
+- Five introductory learning paths with 15 distinct lessons, reflection notes, self-checks, and progress. All lesson prose, activities, questions, and answers have Urdu and Arabic translations.
+- 19 Quranic supplications as complete verses; 121 sourced Hadith records with Arabic, translations, explanations, attribution, grading, filters, pagination, bookmarks, and copying. This is a selected Hadith library, not the entire corpus.
+- Locally calculated prayer times, cities, optional device location, manual coordinates/timezone, six methods, Asr convention, date selection, countdown, fixed Qibla bearing, and dhikr counter. Some polar dates produce unavailable times. Congregation times must be obtained from the mosque.
+- Local profile, saved collections, resume reading, schema-validated backup import, export, and deliberate data clearing. No password, account server, or cross-device sync.
+- In-page daily reminders, optional browser notifications while open, recurring ICS calendar export. No background push delivery when the site is closed.
+- Source finder searches the bundled Quran and Hadith. It is explicitly text search, not generative AI or a fatwa service.
+- English/Urdu/Arabic throughout the interface and lessons, with sourced scripture translations, RTL layouts, responsive navigation, and light/dark themes. Switching language retains the current route and screen state. User-written notes, source URLs, and technical timezone identifiers are not translated. Native browser dialogs use browser/OS language.
 
-The homepage connects to Quran browsing and reader previews, five course outlines and reflective demo lessons, a dua/Hadith library, illustrative prayer tools, sample AI chat, dashboard, reminder preferences, a quiz, and demo authentication screens. Hash navigation keeps this export portable and supports browser back/forward.
+## Sources
 
-Bookmarks, lesson progress, reflections, reminder preferences, theme, language selection, and a demo profile name use local storage. No real credentials are saved. No Firebase, Groq, push notifications, analytics, or production APIs are connected.
+Snapshots retrieved 23 October 2026 are retained in `content-source/`; bundled content and attribution metadata are in `public/content/`.
 
-The English/Urdu/Arabic selector localizes the main navigation and hero with RTL typography. Other screens currently use English; complete localization remains future work. Quran content is a verified excerpt from 20:114, not a full Quran dataset. The ten-surah catalogue links out to full text and recitation. Hadith and full lessons await editorial review. Prayer times are illustrative and must not be used as actual schedules. AI responses are scripted demonstrations with an uncertainty fallback.
+- Quran text and translations: https://quranenc.com/en/home/api. English edition `english_saheeh`: English Translation — Noor International Center, v1.1.2. Urdu: Muhammad Ibrahim Junagarhi, v1.1.3. Original text and footnotes are preserved with visible attribution.
+- Surah/juz metadata: https://api.alquran.cloud/v1/meta.
+- Hadith: https://hadeethenc.com/en/home/about. English and Urdu records include Arabic originals. Each record links to its source and retains its supplied grade.
+- Audio: https://alquran.cloud/cdn, Islamic Network, Mishary Rashid Alafasy. Streaming requires internet access.
+- Prayer calculation: https://github.com/batoulapps/adhan-js.
+- Lessons are authored introductory study notes linked to Quran references, not personalised rulings or a certification curriculum. UI/lesson translations are separate from unchanged source scripture.
 
-## Structure
+`scripts/prepare-content.cjs` reproduces bundled content from the snapshots. `scripts/verify-functional.cjs` checks corpus totals and original-text fidelity, Hadith translations, timezone boundaries and Asr conventions, backup validation, and translation coverage.
 
-- `app/page.tsx`: interactive screens and reusable UI components.
-- `app/data.ts`: course outlines, catalogue, sample timetable, localized hero/navigation copy.
-- `app/globals.css`: design tokens, responsive layouts, light/dark styling, reduced-motion overrides.
-- `public/brand.png`: supplied crescent-and-path mark.
-- `public/journey.webp`: optimized generated hero illustration; original retained in `design/originals/`.
-- `.openai/hosting.json`: private Sites identity and static export configuration.
+## Structure and design
 
-## Design system
+`app/page.tsx` is the shell/homepage. `app/features/` contains functional screens, storage validation, and localization. `translations.json` maps English UI and lesson text to Urdu/Arabic. `globals.css`, `dark.css`, and `features.css` provide ivory/jade and warm-charcoal/sage themes, responsive rules, and RTL layouts.
 
-Updated Islamic identity: warm ivory `#FCF9F2`, deep jade ink `#263F38`, jade actions `#446F60`, sage surfaces, sandstone, peach, and mint. The original lavender art direction remains in the source history. Supporting surfaces use lilac, pink, butter yellow, and sky blue. Plus Jakarta Sans headings, DM Sans interface text, Noto Naskh Arabic, and Noto Nastaliq Urdu load from Google Fonts with system fallbacks. Rounded 12–24px surfaces, subtle elevation, tactile button feedback, and reduced-motion support form the component vocabulary.
+Logo SVGs retain the user-supplied crescent identity. `public/haramain.webp` is generated Makkah/Madinah artwork with CSS drift and pointer parallax, not a navigable WebGL model. Reduced-motion settings are respected. Fonts load from Google Fonts. No analytics, Firebase, Groq, external AI, or password authentication is connected.
 
-## Sources and imagery
+## Validation
 
-The Quran 20:114 excerpt was checked against https://quran.com/20/114. English translation: Dr. Mustafa Khattab, The Clear Quran. The supplied mark belongs to the user's project. Lucide icons use the ISC license.
-
-Hero generated using the built-in image generation tool. Prompt: “Premium soft clay 3D diorama for Deen e Safar: a winding peach pathway through a tall lavender pointed arch, floating peach crescent, mint and butter-yellow stars, closed pastel books without text, a warm lantern and soft clouds, on warm cream. Peaceful matte studio render; no people, sacred figures, lettering, or mosque silhouettes.”
-
-## Next phase
-
-Separate screens into route-specific modules as the prototype grows; add reviewed religious datasets and licensed audio, complete translations, production authentication and synchronization, calculated prayer schedules, and a source-grounded AI backend. Browser notification permissions alone are not sufficient: real scheduling and delivery infrastructure is required.
-
-## Islamic identity revision
-
-- `public/logo-mark.svg`: scalable crescent, star, and winding mint path based on the supplied moon.
-- `public/logo-light.svg` / `logo-dark.svg`: clean horizontal wordmarks; transparent PNG exports in `design/`.
-- `public/app-icon.svg`: compact app icon and favicon; 512px PNG in `design/`.
-- `public/haramain.webp`: optimized Makkah and Madinah montage. Gentle CSS drift and desktop pointer parallax provide motion, disabled for reduced-motion preferences. This is animated rendered artwork, not a navigable WebGL model or a geographical reconstruction.
-- `public/geometry.svg`: original repeating eight-point geometric ornament.
-
-The revised hero was made with the built-in image generation tool. Prompt: A sophisticated 3D architectural montage with the Kaaba and Madinah green dome on distinct cream stone plinths, ivory arches, peach crescent, geometric stars, soft clouds, jade and sage accents, sunrise studio lighting; no people or readable lettering. The full-resolution original is in `design/originals/haramain-original.png`.
-
-Validation: production static build and TypeScript, browser checks of Quran search/bookmarks, course completion, reminders and AI sample response. Homepage overflow checks at 360, 390, 768, 1024, 1440, and 1920px showed no horizontal overflow.
+Production TypeScript/static build and content/logic verification. Browser checks cover Urdu/Arabic switching, lesson completion and notes, Quran bookmarks and resume, sequential audio, Hadith filters/details, city-based prayer updates, and 390px RTL layout without horizontal overflow. Al-Fatihah audio reached ready state 4 and advanced between verses. No console errors were reported during these flows.

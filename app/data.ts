@@ -6,7 +6,7 @@ export const courses = [
       "Begin with the essentials. Build a thoughtful foundation, one lesson at a time.",
     category: "Essentials",
     level: "Beginner",
-    lessons: 8,
+    lessons: 3,
     color: "lilac",
     icon: "book",
     syllabus: [
@@ -26,7 +26,7 @@ export const courses = [
     description: "Explore the context, themes, and beauty of the Quran.",
     category: "Quran",
     level: "Beginner",
-    lessons: 12,
+    lessons: 3,
     color: "mint",
     icon: "bookmark",
     syllabus: [
@@ -44,7 +44,7 @@ export const courses = [
     description: "Small, meaningful acts of kindness in everyday life.",
     category: "Daily life",
     level: "Beginner",
-    lessons: 6,
+    lessons: 3,
     color: "peach",
     icon: "heart",
     syllabus: [
@@ -62,7 +62,7 @@ export const courses = [
     description: "A guided introduction to studying the Prophetic biography.",
     category: "History",
     level: "Intermediate",
-    lessons: 10,
+    lessons: 3,
     color: "sky",
     icon: "compass",
     syllabus: [
@@ -79,7 +79,7 @@ export const courses = [
       "Discover the alphabet and build confidence with a new language.",
     category: "Arabic",
     level: "Beginner",
-    lessons: 14,
+    lessons: 3,
     color: "yellow",
     icon: "star",
     syllabus: [
@@ -158,7 +158,7 @@ export const nav = [
   { id: "learn", label: "Learn Islam", icon: "graduation" },
   { id: "duas", label: "Duas & Hadith", icon: "heart" },
   { id: "prayer", label: "Prayer Tools", icon: "compass" },
-  { id: "ai", label: "AI Assistant", icon: "sparkles" },
+  { id: "ai", label: "Source finder", icon: "sparkles" },
   { id: "dashboard", label: "Dashboard", icon: "grid" },
 ];
 export const dictionary: Record<string, Record<string, string>> = {
@@ -168,7 +168,7 @@ export const dictionary: Record<string, Record<string, string>> = {
     learn: "Learn Islam",
     duas: "Duas & Hadith",
     prayer: "Prayer Tools",
-    ai: "AI Assistant",
+    ai: "Source finder",
     dashboard: "Dashboard",
     welcome: "A BEAUTIFUL JOURNEY INTO ISLAM",
     heading: "Rooted in faith.",
@@ -184,7 +184,7 @@ export const dictionary: Record<string, Record<string, string>> = {
     learn: "اسلام سیکھیں",
     duas: "دعائیں اور حدیث",
     prayer: "نماز کے اوقات",
-    ai: "معاون",
+    ai: "حوالہ تلاش کریں",
     dashboard: "میرا سفر",
     welcome: "علم اور ایمان کا خوبصورت سفر",
     heading: "ہر قدم آپ کو لاتا ہے",
@@ -200,7 +200,7 @@ export const dictionary: Record<string, Record<string, string>> = {
     learn: "تعلّم الإسلام",
     duas: "أدعية وأحاديث",
     prayer: "مواقيت الصلاة",
-    ai: "المساعد",
+    ai: "البحث في المصادر",
     dashboard: "رحلتي",
     welcome: "رحلة جميلة من الإيمان والمعرفة",
     heading: "كل خطوة تقرّبك",

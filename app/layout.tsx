@@ -1,5 +1,6 @@
 import "./globals.css";
 import "./dark.css";
+import "./features.css";
 export const metadata = {
   title: "Deen e Safar — A Beautiful Journey",
   description: "A peaceful space to explore, learn, and grow in faith.",
@@ -16,3 +17,4 @@ export default function RootLayout({
     </html>
   );
 }
+
