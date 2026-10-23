@@ -1806,60 +1806,6 @@ html[lang="ur"] .hero-copy p {
 .hero[dir="rtl"] .hero-copy {
   text-align: right;
 }
-[data-theme="dark"] {
-  --bg: #211e31;
-  --surface: #2c273d;
-  --ink: #f2ecf8;
-  --muted: #b0a5be;
-  --line: #40374e;
-  --soft: #39304e;
-  --shadow: 0 15px 40px #0002;
-}
-[data-theme="dark"] .hero-visual > img,
-[data-theme="dark"] .auth-art img {
-  mix-blend-mode: normal;
-  mask-image: radial-gradient(ellipse 65% 65%, black 40%, transparent 75%);
-}
-[data-theme="dark"] .quick-card,
-[data-theme="dark"] .clay,
-[data-theme="dark"] .reminder-icon {
-  filter: brightness(0.8);
-  color: #44354e;
-}
-[data-theme="dark"] .inspiration,
-[data-theme="dark"] .ai-preview {
-  background: linear-gradient(120deg, #39304e, #463343);
-}
-[data-theme="dark"] .arabic,
-[data-theme="dark"] .inspiration h3 {
-  color: #ded0f4;
-}
-[data-theme="dark"] .reminder-banner {
-  background: #342d38;
-}
-[data-theme="dark"] .preview-chat {
-  background: #eee7f1;
-}
-[data-theme="dark"] .preview-chat strong {
-  color: #3e304d;
-}
-[data-theme="dark"] .notice {
-  color: #c8b7e7;
-}
-[data-theme="dark"] .source,
-[data-theme="dark"] .text-button {
-  color: #b3a0e4;
-}
-[data-theme="dark"] .floating-note {
-  border-color: #5d506b;
-  background: #3b3148;
-  color: #f1e6fa;
-}
-[data-theme="dark"] .citation {
-  background: #3e334e;
-  color: #c4b0e0;
-  border-color: #655075;
-}
 @keyframes float {
   50% {
     translate: 0 -8px;
@@ -2988,66 +2934,6 @@ textarea:focus-visible {
   50% {
     transform: translateY(-9px);
   }
-}
-[data-theme="dark"] {
-  --bg: #192822;
-  --surface: #22352c;
-  --ink: #f3f1e5;
-  --muted: #a7b3a0;
-  --line: #3a4b3d;
-  --primary: #678f71;
-  --soft: #2d4133;
-}
-[data-theme="dark"] .header {
-  border-color: var(--line);
-}
-[data-theme="dark"] .header nav a.active,
-[data-theme="dark"] .header nav a:hover {
-  background: #354b38;
-  color: #d6e5c8;
-}
-[data-theme="dark"] .hero h1 em {
-  background: linear-gradient(100deg, #b1c79d, #e6c79f);
-  background-clip: text;
-}
-[data-theme="dark"] .hero-visual > img {
-  mix-blend-mode: normal;
-  mask-image: radial-gradient(ellipse 65% 64%, black 42%, transparent 76%);
-}
-[data-theme="dark"] .inspiration,
-[data-theme="dark"] .ai-preview {
-  background: linear-gradient(120deg, #30452f, #384335);
-  border-color: var(--line);
-}
-[data-theme="dark"] .inspiration h3,
-[data-theme="dark"] .inspiration .arabic,
-[data-theme="dark"] .verse-card .arabic {
-  color: #d6e1c4;
-}
-[data-theme="dark"] .course-info h3 {
-  color: #e2e8d4;
-}
-[data-theme="dark"] .next-prayer {
-  background: var(--soft);
-}
-[data-theme="dark"] .reminder-banner {
-  background: #303d2d;
-}
-[data-theme="dark"] .notice {
-  color: #b6cba4;
-}
-[data-theme="dark"] .text-button,
-[data-theme="dark"] .source {
-  color: #b4c99c;
-}
-[data-theme="dark"] footer {
-  background: var(--surface);
-}
-[data-theme="dark"] .reader-heading h1 {
-  color: #c5d7b0;
-}
-[data-theme="dark"] .selected {
-  color: #c9dcba;
 }
 @media (max-width: 1200px) {
   .hero {

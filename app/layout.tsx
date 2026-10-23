@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./dark.css";
 export const metadata = {
   title: "Deen e Safar — A Beautiful Journey",
   description: "A peaceful space to explore, learn, and grow in faith.",

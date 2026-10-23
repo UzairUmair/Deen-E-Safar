@@ -1,0 +1,330 @@
+/* A single, coherent evening palette. Warm charcoal, porcelain, sage and brass. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #171c1b;
+  --surface: #202725;
+  --ink: #eeeae1;
+  --muted: #a9b2ac;
+  --line: #35403b;
+  --primary: #a8c9b6;
+  --soft: #2c3932;
+  --shadow: 0 16px 40px #00000026;
+}
+[data-theme="dark"] body {
+  background:
+    radial-gradient(ellipse at 80% 6%, #29332b55, transparent 36%), var(--bg);
+}
+[data-theme="dark"] .header {
+  background: #202725eb;
+  border-color: #39433d;
+  box-shadow: 0 12px 32px #0002;
+}
+[data-theme="dark"] .brand small {
+  color: #a3afa5;
+}
+[data-theme="dark"] .header nav a.active,
+[data-theme="dark"] .header nav a:hover {
+  background: #334139;
+  color: #d0e2d4;
+}
+[data-theme="dark"] .btn {
+  background: #a8c9b6;
+  color: #172c22;
+  box-shadow: 0 6px 20px #0002;
+}
+[data-theme="dark"] .btn:hover {
+  background: #bedac9;
+  box-shadow: 0 8px 24px #0003;
+}
+[data-theme="dark"] .btn.secondary {
+  background: #242d28;
+  color: #e4e8df;
+  border-color: #4a594f;
+  box-shadow: none;
+}
+[data-theme="dark"] .btn.secondary:hover {
+  background: #303e34;
+}
+[data-theme="dark"] .hero h1 em {
+  background: linear-gradient(100deg, #b7d1bc, #dccba5);
+  background-clip: text;
+  color: transparent;
+}
+[data-theme="dark"] .salaam {
+  color: #b7c7b3;
+}
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .welcome {
+  color: #c2b18b;
+}
+[data-theme="dark"] .hero:before {
+  opacity: 0.14;
+}
+/* Give the sunrise artwork a deliberate architectural frame, not a black vignette. */
+[data-theme="dark"] .hero-visual {
+  padding: 18px;
+  margin: 24px 0 24px 12px;
+  border: 1px solid #6b6f554f;
+  border-radius: 48% 48% 24px 24px;
+  background: linear-gradient(160deg, #343e32, #242d26);
+  box-shadow: 0 25px 65px #0003;
+}
+[data-theme="dark"] .hero-visual > img {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  border-radius: 48% 48% 15px 15px;
+  mask-image: none;
+  mix-blend-mode: normal;
+  filter: brightness(0.83) saturate(0.76);
+  animation: evening-drift 12s ease-in-out infinite;
+}
+[data-theme="dark"] .floating-note {
+  background: #26312af5;
+  color: #e7e8da;
+  border: 1px solid #52604b;
+  box-shadow: 0 8px 24px #0003;
+}
+[data-theme="dark"] .floating-note small {
+  color: #b3bfac;
+}
+[data-theme="dark"] .note-one {
+  bottom: 40px;
+  left: -16px;
+}
+[data-theme="dark"] .note-two {
+  top: 70px;
+  right: -10px;
+}
+[data-theme="dark"] .note-two > span {
+  color: #d2c299;
+}
+[data-theme="dark"] .note-icon {
+  background: #394b3f;
+  color: #c0d6c0;
+}
+[data-theme="dark"] .hero-notes svg {
+  color: #b0c3aa;
+}
+[data-theme="dark"] .lilac {
+  background: #303933;
+}
+[data-theme="dark"] .mint {
+  background: #273e35;
+}
+[data-theme="dark"] .peach {
+  background: #42362e;
+}
+[data-theme="dark"] .yellow {
+  background: #403e2e;
+}
+[data-theme="dark"] .sky {
+  background: #2c3b40;
+}
+[data-theme="dark"] .pink {
+  background: #403339;
+}
+[data-theme="dark"] .quick-card {
+  color: #edece2;
+  border: 1px solid #ffffff0b;
+}
+[data-theme="dark"] .quick-card small {
+  color: #c0c1b4;
+}
+[data-theme="dark"] .quick-icon {
+  color: #d0d9c5;
+  background: #ffffff0a;
+  border-color: #ffffff15;
+  box-shadow: inset 0 1px 0 #ffffff10;
+}
+[data-theme="dark"] .inspiration {
+  background: linear-gradient(125deg, #2e3a30, #30362b);
+  border-color: #48513d;
+}
+[data-theme="dark"] .inspiration .arabic,
+[data-theme="dark"] .inspiration h3,
+[data-theme="dark"] .verse-card .arabic,
+[data-theme="dark"] .reader-heading h1 {
+  color: #e2dfc9;
+}
+[data-theme="dark"] .inspiration > p {
+  color: #b9c0ac;
+}
+[data-theme="dark"] .source,
+[data-theme="dark"] .text-button,
+[data-theme="dark"] .inline-link {
+  color: #b4d0b8;
+}
+[data-theme="dark"] .attribution {
+  color: #b7bfac;
+  opacity: 1;
+}
+[data-theme="dark"] .next-prayer {
+  background: #2b3930;
+}
+[data-theme="dark"] .next-prayer small {
+  color: #b6c3ac;
+}
+[data-theme="dark"] .prayer-list svg {
+  color: #adbaa5;
+}
+[data-theme="dark"] .prayer-list .selected {
+  color: #d6ceaa;
+}
+[data-theme="dark"] .pill {
+  background: #20291fd9;
+  color: #d1dbc1;
+  border: 1px solid #5b665140;
+}
+[data-theme="dark"] .course-info h3 {
+  color: #e5e8dd;
+}
+[data-theme="dark"] .circle {
+  color: #c0d6bb;
+}
+[data-theme="dark"] .clay:before {
+  background: #0003;
+}
+[data-theme="dark"] .clay-object {
+  filter: brightness(0.83) saturate(0.72);
+  box-shadow:
+    inset 3px 3px 10px #ffffff35,
+    inset -5px -5px 12px #0002,
+    10px 16px 18px #0003;
+}
+[data-theme="dark"] .clay i,
+[data-theme="dark"] .clay b {
+  color: #c8c29e;
+}
+[data-theme="dark"] .ai-preview {
+  background: linear-gradient(120deg, #29352c, #242e29);
+}
+[data-theme="dark"] .ai-preview > div > small {
+  color: #b1bba9;
+}
+[data-theme="dark"] .preview-chat {
+  background: #1f2923;
+  border: 1px solid #4a5848;
+  box-shadow: 0 20px 40px #0002;
+}
+[data-theme="dark"] .preview-chat strong {
+  color: #e8e9dd;
+}
+[data-theme="dark"] .preview-chat small {
+  color: #b0bcaa;
+}
+[data-theme="dark"] .preview-chat .user-bubble {
+  background: #354536;
+  color: #e1e6d5;
+}
+[data-theme="dark"] .assistant-bubble {
+  color: #c6cdbd;
+}
+[data-theme="dark"] .ai-avatar {
+  background: #3e5140;
+  color: #c8dbb9;
+}
+[data-theme="dark"] .citation {
+  color: #c8d8b9;
+  background: #2d3b2d;
+  border-color: #4b6042;
+}
+[data-theme="dark"] .chat-foot {
+  color: #adbba5;
+  border-color: #3e4b3c;
+}
+[data-theme="dark"] .reminder-banner {
+  background: #2b3027;
+  border: 1px solid #454b38;
+}
+[data-theme="dark"] .calendar-art {
+  background: linear-gradient(130deg, #a69a77, #6e7055);
+  color: #eee1b9;
+  box-shadow:
+    inset 2px 2px 6px #ffffff25,
+    6px 9px 15px #0002;
+}
+[data-theme="dark"] footer {
+  background:
+    linear-gradient(100deg, #1c2420f5, #1e2721f5), url("/geometry.svg");
+}
+[data-theme="dark"] .notice {
+  background: #2a362d;
+  color: #c3d1b9;
+  border-color: #46553e;
+}
+[data-theme="dark"] .selected,
+[data-theme="dark"] .chip.selected,
+[data-theme="dark"] .surah-number,
+[data-theme="dark"] .step {
+  background: #304134;
+  color: #d0dfc3;
+}
+[data-theme="dark"] .step.complete {
+  background: #3c5743;
+  color: #d6ead3;
+}
+[data-theme="dark"] .reminder-icon {
+  color: #c4d2b7;
+}
+[data-theme="dark"] .toggle {
+  background: #49534b;
+}
+[data-theme="dark"] .toggle.on {
+  background: #90b49b;
+}
+[data-theme="dark"] .toggle > span {
+  background: #f0f0e6;
+}
+[data-theme="dark"] .ai-sidebar-note,
+[data-theme="dark"] .ai-sidebar-note p {
+  color: #b5c0ad;
+}
+[data-theme="dark"] .send {
+  color: #183024;
+}
+[data-theme="dark"] .auth-art img {
+  mix-blend-mode: normal;
+  filter: brightness(0.8) saturate(0.75);
+  border-radius: 45% 45% 20px 20px;
+}
+[data-theme="dark"] .modal-backdrop {
+  background: #080e0bbb;
+}
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #9aa89c;
+}
+[data-theme="dark"] :focus-visible {
+  outline-color: #c7d5a8;
+}
+@keyframes evening-drift {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+@media (max-width: 767px) {
+  [data-theme="dark"] .hero-visual {
+    width: calc(100% - 12px);
+    padding: 12px;
+    margin: 28px auto 16px;
+  }
+  [data-theme="dark"] .hero-visual > img {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+  [data-theme="dark"] .note-one {
+    bottom: 20px;
+    left: -6px;
+  }
+  [data-theme="dark"] .note-two {
+    top: 35px;
+    right: -6px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="dark"] .hero-visual > img {
+    animation: none;
+  }
+}
