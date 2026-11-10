@@ -3,6 +3,7 @@ import { ArrowRight, Bookmark, BookOpen, Compass, GraduationCap, Heart, Sparkles
 import { motion } from "motion/react";
 import { tr } from "../../features/i18n";
 import { RevealSection } from "../motion/RevealSection";
+import { link } from "../../lib/router";
 
 // Every card opens an implemented route; `note` states plainly what is not built yet.
 const features = [
@@ -12,13 +13,13 @@ const features = [
     tone: "lavender",
     title: "Islamic AI Assistant",
     route: "ai",
-    text: "Search the Quran and Hadith library by word or phrase, then read the original context.",
-    note: "Source finder today · generated answers coming soon",
+    text: "Search the bundled Quran and Hadith texts by word or phrase, then read each passage in context.",
+    note: "Source search today · live answers coming soon",
   },
-  { icon: Compass, tone: "gold", title: "Prayer Times", route: "prayer", text: "Locally calculated prayer times for your city, with a Qibla bearing and a dhikr counter." },
+  { icon: Compass, tone: "gold", title: "Prayer Times", route: "prayer", text: "Prayer times for your city with a live countdown to the next prayer, a Qibla bearing, and a dhikr counter." },
   { icon: Heart, tone: "peach", title: "Daily Duas", route: "duas", text: "Quranic supplications shown as complete verses, alongside a selected, sourced Hadith collection." },
   { icon: GraduationCap, tone: "turquoise", title: "Interactive Learning", route: "learn", text: "Five introductory learning paths with lessons, reflection notes, and self-checks." },
-  { icon: Bookmark, tone: "gold", title: "Bookmarks and Progress", route: "dashboard", text: "Saved verses, reading positions, and lesson progress, kept privately in this browser." },
+  { icon: Bookmark, tone: "gold", title: "Bookmarks and Progress", route: "dashboard", text: "Saved verses and duas, your reading position, and your settings, kept privately in this browser." },
 ];
 
 export function LearningFeatures() {
@@ -38,7 +39,7 @@ export function LearningFeatures() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.45, delay: (i % 3) * 0.08, ease: [0.22, 0.61, 0.36, 1] }}
           >
-            <a className="feature-card" href={`#${f.route}`}>
+            <a className="feature-card" href={link(f.route)}>
               <span className={`feature-icon ${f.tone}`} aria-hidden="true">
                 <f.icon size={22} strokeWidth={1.7} />
               </span>

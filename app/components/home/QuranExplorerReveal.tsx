@@ -27,7 +27,7 @@ export function QuranExplorerReveal({ go, staticImage }: { go: (page: string) =>
             const arabic = data?.chapters.find((c) => c.id === s.id)?.arabic;
             return (
               <li key={s.id} className="surah-preview">
-                <a href={`#reader?surah=${s.id}&ayah=1`}>
+                <a href={`#/quran/${s.id}`}>
                   <span className="surah-preview-number">{String(s.id).padStart(2, "0")}</span>
                   <span className="surah-preview-arabic" lang="ar" dir="rtl">
                     {arabic || "\u00a0"}

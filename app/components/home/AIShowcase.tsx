@@ -60,14 +60,14 @@ export function AIShowcase({ go, lang }: { go: (page: string) => void; lang: str
             <motion.p className="chat-label" variants={item}>
               {tr("Sources")}
             </motion.p>
-            <motion.a className="source-card" variants={item} href="#reader?surah=13&ayah=28">
+            <motion.a className="source-card" variants={item} href="#/quran/13?ayah=28">
               <BookOpen size={17} aria-hidden="true" />
               <span>
                 <strong>{tr("Quran 13:28")} · Ar-Ra&apos;d</strong>
                 <small>{tr("Read in context")}</small>
               </span>
             </motion.a>
-            <motion.a className="source-card" variants={item} href="#reader?surah=2&ayah=152">
+            <motion.a className="source-card" variants={item} href="#/quran/2?ayah=152">
               <BookOpen size={17} aria-hidden="true" />
               <span>
                 <strong>{tr("Quran 2:152")} · Al-Baqarah</strong>
