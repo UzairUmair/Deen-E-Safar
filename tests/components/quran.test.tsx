@@ -236,7 +236,7 @@ describe("Surah reader", () => {
     renderScreen(<SurahReader surahParam="1" ayahParam="6" />);
     const items = await screen.findAllByRole("listitem");
     await waitFor(() => expect(items[5]).toHaveAttribute("data-highlighted", "true"));
-    expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
+    await waitFor(() => expect(Element.prototype.scrollIntoView).toHaveBeenCalled());
     expect(readingProgressStore.get()).toMatchObject({ surah: 1, ayah: 6 });
   });
 

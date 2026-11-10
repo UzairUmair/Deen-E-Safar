@@ -1,45 +1,90 @@
 # Deen e Safar
 
-A functional Islamic reading and learning website built with Next.js, React, TypeScript, Motion, Lucide, and Adhan. Static export with browser-local progress.
+An Islamic reading and learning website: Quran Explorer with translations and recitation, prayer times, duas, Hadith, learning paths, and a guest dashboard. Built with Next.js (static export), React, TypeScript, TanStack Query, react-i18next, Motion, and three.js for the homepage.
+
+It runs entirely in **Guest Mode**: no account, no database, no API keys. Firebase Authentication, MongoDB and a live AI model are not connected.
 
 ## Run
 
-Run `npm install`, `npm run dev`, `npm run verify`, and `npm run build`. With the site running, `npm run verify:ui` runs the browser checks (set `CHROME_PATH` if Chrome is not installed as a channel, and `BASE` to test another URL). Development URL: http://127.0.0.1:3000. Production output: `out/`. Hosting identity is retained in `.openai/hosting.json`.
+```
+npm install
+npm run dev          # http://127.0.0.1:3000
+npm run build        # static site in out/
+```
+
+Checks:
+
+| Command | What it does | Needs |
+| --- | --- | --- |
+| `npm run lint` | ESLint | — |
+| `npm run typecheck` | TypeScript | — |
+| `npm test` | Vitest unit and component tests against recorded provider responses | — |
+| `npm run verify` | Integrity of the bundled content (duas, Hadith, lessons, translations) | — |
+| `npm run verify:app` | Playwright checks of the application screens, providers mocked, clock fixed | site running |
+| `npm run verify:ui` | Playwright checks of the homepage 3D story and global UI | site running |
+| `npm run verify:live` | Calls the real providers and compares them with the fixtures | network |
+
+The Playwright scripts use an installed Chrome; set `CHROME_PATH` to point at a binary and `BASE` to test another URL.
 
 ## Features
 
-- Complete Quran: 114 surahs / 6,236 ayahs, 30 juz entry points, Arabic, English and Urdu translations and footnotes. Full-text search, bookmarks, saved reading positions, text sizing, focus mode, copying, sequential verse audio.
-- Five introductory learning paths with 15 distinct lessons, reflection notes, self-checks, and progress. All lesson prose, activities, questions, and answers have Urdu and Arabic translations.
-- 19 Quranic supplications as complete verses; 121 sourced Hadith records with Arabic, translations, explanations, attribution, grading, filters, pagination, bookmarks, and copying. This is a selected Hadith library, not the entire corpus.
-- Locally calculated prayer times, cities, optional device location, manual coordinates/timezone, six methods, Asr convention, date selection, countdown, fixed Qibla bearing, and dhikr counter. Some polar dates produce unavailable times. Congregation times must be obtained from the mosque.
-- Local profile, saved collections, resume reading, schema-validated backup import, export, and deliberate data clearing. No password, account server, or cross-device sync.
-- In-page daily reminders, optional browser notifications while open, recurring ICS calendar export. No background push delivery when the site is closed.
-- Source finder searches the bundled Quran and Hadith. It is explicitly text search, not generative AI or a fatwa service.
-- English/Urdu/Arabic throughout the interface and lessons, with sourced scripture translations, RTL layouts, responsive navigation, and light/dark themes. Switching language retains the current route and screen state. User-written notes, source URLs, and technical timezone identifiers are not translated. Native browser dialogs use browser/OS language.
+- **Quran Explorer** (`#/quran`, `#/quran/:surah`): all 114 surahs from Al Quran Cloud. Uthmani Arabic text, English (Saheeh International) or Urdu (Fateh Muhammad Jalandhry) translation, verse-by-verse recitation (Alafasy or Al-Husary) with play, pause, resume, stop and auto-advance, reader settings, keyword search in Arabic, English or Urdu, juz entry points, bookmarks, and a saved reading position.
+- **Prayer Times** (`#/prayer`): AlAdhan timings for a listed city, the device location (asked only on request) or typed coordinates; ten calculation methods, Asr school, 12/24-hour clock, a per-second countdown that rolls over to tomorrow's Fajr, Hijri date, Qibla bearing, and a dhikr counter.
+- **Duas** (`#/duas`, `#/duas/:id`): 19 supplications, each a complete Quran verse with reference and translation source. **Hadith** (`#/hadith`): 121 sourced records with grading.
+- **Daily verse**: a fixed rotation of 37 verse references, one per calendar day, text fetched from the provider.
+- **Guest dashboard** (`#/dashboard`), **Bookmarks** (`#/bookmarks`), **Preferences** (`#/preferences`) with backup export/import and clear-data.
+- **Islamic AI Assistant** (`#/ai`): chat layout and service interface are in place; answers are **not** generated. It runs a labelled literal text search over the bundled Quran and Hadith.
+- Learning paths, lessons, reminders and a quiz from the first version.
+- English, Urdu and Arabic interface with RTL layouts; light and dark themes.
 
-## Sources
+## Architecture
 
-Snapshots retrieved 23 October 2026 are retained in `content-source/`; bundled content and attribution metadata are in `public/content/`.
+```
+React screens / components
+        │
+hooks (TanStack Query, useSyncExternalStore)
+        │
+services (quran, prayer, duas, ai, guest)        ← no component talks past this line
+        │
+provider adapters (lib/quranApi, lib/prayerApi)      guest stores (versioned localStorage)
+        │
+lib/apiClient (timeouts, cancellation, error kinds, response validation)
+```
 
-- Quran text and translations: https://quranenc.com/en/home/api. English edition `english_saheeh`: English Translation — Noor International Center, v1.1.2. Urdu: Muhammad Ibrahim Junagarhi, v1.1.3. Original text and footnotes are preserved with visible attribution.
-- Surah/juz metadata: https://api.alquran.cloud/v1/meta.
-- Hadith: https://hadeethenc.com/en/home/about. English and Urdu records include Arabic originals. Each record links to its source and retains its supplied grade.
-- Audio: https://alquran.cloud/cdn, Islamic Network, Mishary Rashid Alafasy. Streaming requires internet access.
-- Prayer calculation: https://github.com/batoulapps/adhan-js.
-- Lessons are authored introductory study notes linked to Quran references, not personalised rulings or a certification curriculum. UI/lesson translations are separate from unchanged source scripture.
+- `app/lib/` — `apiClient`, provider adapters, router, validation, query client.
+- `app/services/` — application logic. Swapping a provider means replacing one adapter.
+- `app/services/guest/` — `guestStorage` (store factory: versioned envelopes, validation, corruption recovery, cross-tab sync), bookmark, reading-progress, preferences stores, and a one-time migration of first-version keys.
+- `app/hooks/` — `useSurahs`, `useSurah`, `useQuranAudio`, `usePrayerTimes`, `useBookmarks`, `useReadingProgress`, `useGuestPreferences`, …
+- `app/screens/` — one file per route; loaded with `React.lazy`, so the homepage's three.js never loads on them and they never load on the homepage.
+- `app/components/{quran,prayer,dashboard,ui}` — presentational pieces. `components/{home,three,motion}` — homepage.
+- `app/features/` — first-version screens still in use (learning, Hadith, reminders) and `i18n.ts` / `translations.json`.
 
-`scripts/prepare-content.cjs` reproduces bundled content from the snapshots. `scripts/verify-functional.cjs` checks corpus totals and original-text fidelity, Hadith translations, timezone boundaries and Asr conventions, backup validation, and translation coverage.
+Storage keys: `deen-v2:guest:bookmarks`, `:reading-progress`, `:preferences`, `:recent-content`, `:daily-verse`. Bookmarks hold references only (`surah`, `ayah`), never verse text. A future authenticated adapter can implement the same `Store` interface; `exportGuestData()` is the hand-off for a consented migration.
 
-## Structure and design
+Routing is hash-based with path-shaped routes (`#/quran/2?ayah=255`). Links from the first version (`#reader?surah=2&ayah=255`) are redirected.
 
-`app/page.tsx` is the shell/homepage. `app/features/` contains functional screens, storage validation, and localization. `translations.json` maps English UI and lesson text to Urdu/Arabic. `globals.css`, `dark.css`, and `features.css` provide layout, responsive rules, and RTL layouts; `app/styles/design-tokens.css` sets the current cream/navy/gold palette (and a navy dark theme) on top of them.
+Translations: keys are the English strings; `app/features/translations.json` maps each to `[Urdu, Arabic]` and feeds i18next. `npm run verify` fails if a registered interface string lacks either.
 
-Logo SVGs retain the user-supplied crescent identity. Reduced-motion settings are respected. Fonts load from Google Fonts. No analytics, Firebase, Groq, external AI, or password authentication is connected.
+## Providers and sources
 
-## Homepage 2.0
+| Data | Source | Notes |
+| --- | --- | --- |
+| Quran text, translations, search, metadata | [Al Quran Cloud API](https://alquran.cloud/api) | Free, key-less, soft per-second rate limit. [Terms](https://alquran.cloud/terms-and-conditions): text must keep its diacritics and orthography and not be altered; translators must be credited by name (shown beside every verse and in copied text). |
+| Recitation audio | Islamic Network CDN (`cdn.islamic.network`) | Licensed for free, non-commercial redistribution; reciters hold copyright. |
+| Prayer times, Hijri date | [AlAdhan API](https://aladhan.com/prayer-times-api) | Coordinates-based `/timings/{date}`. Calculated times; mosque timetables can differ. |
+| Duas (Quran verses), Hadith | Snapshots of QuranEnc.com and HadeethEnc.com in `content-source/`, bundled under `public/content/` | English: Noor International Center v1.1.2; Urdu: Muhammad Ibrahim Junagarhi v1.1.3. Retrieved 23 October 2026. |
 
-The public homepage is a scroll-driven 3D story built with three.js, React Three Fiber, Drei and GSAP ScrollTrigger: an interactive bookshelf, a Quran that opens on a rehal as you scroll, and surah previews linking into the reader. All models and textures are procedural; the Quran model carries no text. 3D exists only on the homepage and loads lazily. Reduced motion, missing or software-only WebGL, data saver and low-memory devices get pre-rendered stills in normal page flow (`?3d=force` overrides the software-renderer check). Every `.btn` site-wide uses the diagonal sweep from `app/styles/animations.css`; new code should use `app/components/motion/AnimatedButton.tsx`. Design notes, the reference mapping and the verification record are in `docs/visual-reference-analysis.md`.
+The app does not modify Quran text. The only transformation is removing a leading byte-order mark the provider prepends to some strings.
 
-## Validation
+**Before any commercial use**, re-read the providers' terms: the recitations in particular are licensed for non-commercial redistribution.
 
-Production TypeScript/static build and content/logic verification. Browser checks cover Urdu/Arabic switching, lesson completion and notes, Quran bookmarks and resume, sequential audio, Hadith filters/details, city-based prayer updates, and 390px RTL layout without horizontal overflow. Al-Fatihah audio reached ready state 4 and advanced between verses. No console errors were reported during these flows.
+## Privacy
+
+Nothing is sent to a server of ours. The browser requests Quran data and audio from `alquran.cloud` / `islamic.network` and prayer times from `aladhan.com` (which receives the chosen coordinates; device coordinates are rounded to two decimals before use). Fonts load from Google Fonts.
+
+## Documentation
+
+- [`docs/functionality-status.md`](docs/functionality-status.md) — every feature with its verification status, known limitations, and what is deferred.
+- [`docs/functionality-audit.md`](docs/functionality-audit.md) — the audit that preceded this milestone, including the interaction audit.
+- [`docs/visual-reference-analysis.md`](docs/visual-reference-analysis.md) — homepage design and 3D notes.
+- [`tests/fixtures/README.md`](tests/fixtures/README.md) — how the recorded provider responses were made.

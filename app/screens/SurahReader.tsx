@@ -94,22 +94,25 @@ function Reader({ number, ayahParam }: { number: number; ayahParam: string | nul
     if (!loaded) return;
     const target = requested ? Math.min(Math.max(requested, 1), count) : null;
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let jump: ReturnType<typeof setTimeout> | undefined;
     if (target && target > 1) {
-      scrollToAyah(target);
       setHighlight(target);
       saveReadingProgress(number, target);
+      // After the shell's scroll-to-top for the new route, which runs once this effect has.
+      jump = setTimeout(() => scrollToAyah(target), 60);
       timer = setTimeout(() => setHighlight(null), 2600);
     }
     // Give the jump a moment to land before scroll tracking may overwrite the position.
     const settle = setTimeout(() => (settled.current = true), 700);
     return () => {
       clearTimeout(timer);
+      clearTimeout(jump);
       clearTimeout(settle);
       settled.current = false;
     };
   }, [loaded, requested, count, number, scrollToAyah]);
 
-  // Reading position: the ayah crossing the upper part of the screen, saved after the
+  // Reading position: the first ayah below the docked header and player, saved after the
   // reader has rested there for a moment rather than on every scroll event.
   useEffect(() => {
     if (!loaded || !list.current || typeof IntersectionObserver === "undefined") return;
@@ -127,7 +130,7 @@ function Reader({ number, ayahParam }: { number: number; ayahParam: string | nul
           if (settled.current && visible.size) saveReadingProgress(number, Math.min(...visible));
         }, 1500);
       },
-      { rootMargin: "-20% 0px -55% 0px" },
+      { rootMargin: "-230px 0px -40% 0px" },
     );
     list.current.querySelectorAll("li.ayah").forEach((item) => observer.observe(item));
     return () => {

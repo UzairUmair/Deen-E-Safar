@@ -110,6 +110,8 @@ function Shell() {
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      // Deliberately read at cleanup time: focus returns to the toggle as it exists when the drawer closes.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       menuButton.current?.focus();
     };
   }, [menu]);

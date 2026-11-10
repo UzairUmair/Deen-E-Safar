@@ -5,6 +5,7 @@
 // Headless Chrome renders WebGL in software, so the live 3D scene is requested with ?3d=force.
 import assert from "node:assert/strict";
 import { chromium } from "playwright-core";
+import { mockProviders, preferences } from "./lib/harness.mjs";
 
 const BASE = process.env.BASE || "http://127.0.0.1:3000";
 const launch = { args: ["--no-sandbox", "--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--ignore-gpu-blocklist"] };
@@ -17,11 +18,12 @@ const problems = [];
 
 async function open({ width = 1440, height = 900, query = "?3d=force", hash = "home", reducedMotion = "no-preference", lang, mobile = false, args } = {}) {
   const context = await (args ? await chromium.launch({ ...launch, args: [...launch.args, ...args] }) : browser).newContext({ viewport: { width, height }, reducedMotion, hasTouch: mobile, isMobile: mobile });
+  await mockProviders(context); // recorded provider responses: no third-party dependency
   const page = await context.newPage();
   const errors = [];
   page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
   page.on("pageerror", (e) => errors.push(String(e)));
-  if (lang) await page.addInitScript((l) => localStorage.setItem("deen-preferences", JSON.stringify({ lang: l })), lang);
+  if (lang) await page.addInitScript((entries) => Object.entries(entries).forEach(([k, v]) => localStorage.setItem(k, v)), preferences({ language: lang }));
   await page.goto(`${BASE}/${query}#${hash}`, { waitUntil: "load" });
   await page.waitForSelector("html[data-theme]"); // set once the app has hydrated and read preferences
   return { page, errors, close: () => context.close() };
@@ -83,16 +85,17 @@ await test("scrolling opens the story, scrolling back reverses it", async () => 
 await test("surah preview cards and the explorer CTA open real routes", async () => {
   const { page, close } = await open();
   await page.waitForSelector('.story[data-timeline="ready"] .story-canvas[data-ready="true"]', { timeout: 30000 });
-  assert.deepEqual(await page.$$eval(".surah-preview a", (links) => links.map((a) => a.getAttribute("href"))), ["#reader?surah=1&ayah=1", "#reader?surah=2&ayah=1", "#reader?surah=3&ayah=1"]);
+  assert.deepEqual(await page.$$eval(".surah-preview a", (links) => links.map((a) => a.getAttribute("href"))), ["#/quran/1", "#/quran/2", "#/quran/3"]);
   await scrollStory(page, 0.78);
-  await page.click(".surah-preview:nth-child(2) a");
-  await page.waitForSelector(".reader-heading");
-  assert.match(await page.textContent(".reader-heading"), /Al-Baqara/);
+  await page.click(".surah-preview:nth-child(1) a");
+  await page.waitForSelector(".surah-heading strong");
+  assert.match(await page.textContent(".surah-heading"), /Al-Faatiha/);
+  await page.waitForSelector("li.ayah");
   await page.goto(`${BASE}/?3d=force#home`);
   await page.waitForSelector('.story[data-timeline="ready"] .story-canvas[data-ready="true"]', { timeout: 30000 });
   await scrollStory(page, 0.78);
   await page.click(".guide-copy .btn");
-  await page.waitForSelector(".surah-grid");
+  await page.waitForSelector(".surah-tile");
   await close();
 });
 
@@ -121,11 +124,12 @@ await test("bookshelf: 3D hover labels a book, click opens its panel, action nav
   await page.click('.book-chips button:has-text("Seerah")');
   await page.click(".book-panel .btn");
   await page.waitForFunction(() => location.hash === "#course?path=seerah");
+  await page.waitForSelector(".inner-main h1");
   await close();
 });
 
 await test("diagonal sweep button: hidden at rest, covers on hover, no layout shift, disabled is inert", async () => {
-  const { page, close } = await open({ hash: "dashboard" });
+  const { page, close } = await open({ hash: "/preferences" });
   const button = page.locator(".inner-main .btn").first();
   await button.waitFor();
   await page.waitForTimeout(800);
@@ -148,7 +152,7 @@ await test("diagonal sweep button: hidden at rest, covers on hover, no layout sh
 });
 
 await test("user dashboard and Quran reader stay free of WebGL", async () => {
-  for (const hash of ["dashboard", "reader?surah=1&ayah=1", "quran", "prayer", "duas"]) {
+  for (const hash of ["/dashboard", "/quran/1", "/quran", "/prayer", "/duas"]) {
     const { page, errors, close } = await open({ hash });
     await page.waitForTimeout(1500);
     assert.equal(await page.locator("canvas").count(), 0, `${hash} has no canvas`);
@@ -169,8 +173,8 @@ await test("mobile menu: opens, traps focus, Escape closes and returns focus", a
   await page.waitForSelector(".drawer", { state: "detached" });
   await page.waitForFunction(() => document.activeElement.classList.contains("mobile-menu"), null, { timeout: 5000 });
   await page.click(".mobile-menu");
-  await page.click('.drawer a[href="#prayer"]');
-  await page.waitForFunction(() => location.hash === "#prayer");
+  await page.click('.drawer a[href="#/prayer"]');
+  await page.waitForFunction(() => location.hash === "#/prayer");
   await page.waitForSelector(".drawer", { state: "detached" });
   await close();
 });
@@ -223,7 +227,7 @@ await test("WebGL disabled: homepage falls back to the static stills and still n
   await page.waitForSelector('.story[data-mode="static"]');
   assert.equal(await page.locator("canvas").count(), 0);
   await page.click(".guide-copy .btn");
-  await page.waitForSelector(".surah-grid");
+  await page.waitForFunction(() => location.hash === "#/quran");
   assert.deepEqual(errors, []);
   await fallback.close();
 });
@@ -251,7 +255,7 @@ await test("AI showcase: labelled preview, messages cascade in order, verse come
   assert.deepEqual(order, [0, 1, 2, 3, 4, 5], "items appeared one after another");
   const bundled = await (await fetch(`${BASE}/content/quran/13.json`)).json();
   assert.equal((await page.textContent(".chat-arabic")).trim(), bundled.verses.find((v) => v.id === 28).arabic.trim());
-  assert.equal(await page.getAttribute(".phone .source-card", "href"), "#reader?surah=13&ayah=28");
+  assert.equal(await page.getAttribute(".phone .source-card", "href"), "#/quran/13?ayah=28");
   await close();
 });
 

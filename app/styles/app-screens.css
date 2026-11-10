@@ -1319,3 +1319,6 @@ a.surah-tile:hover {
 .verse-jump input {
   width: 110px;
 }
+.reader-nav .verse-jump input {
+  width: 124px;
+}
