@@ -1,10 +1,9 @@
 "use client";
 // localized-jsx
 import {tr} from './features/i18n';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ArrowRight,
-  ArrowLeft,
   BookOpen,
   Bookmark,
   Heart,
@@ -15,25 +14,14 @@ import {
   Bell,
   Menu,
   X,
-  Search,
   GraduationCap,
   LayoutGrid,
   Home,
   Check,
   ChevronRight,
-  Send,
-  Copy,
   Settings,
   Globe,
-  Calendar,
-  Clock,
-  Leaf,
   Star,
-  Eye,
-  EyeOff,
-  LogOut,
-  Plus,
-  Share2,
 } from "lucide-react";
 import { motion, MotionConfig } from "motion/react";
 import {setLanguage,LanguageContext} from "./features/i18n";
@@ -42,7 +30,9 @@ import Library from './features/Library';
 import PrayerTools,{PrayerWidget} from './features/Prayer';
 import Learn from './features/Learn';
 import {Personal,RemindersTool,ReminderScheduler,SourceFinder} from './features/Personal';
-import { courses, nav, dictionary } from "./data";
+import { nav, dictionary } from "./data";
+import { Home as HomeScreen } from "./components/home/Home";
+import { AnimatedButton } from "./components/motion/AnimatedButton";
 const icons: Record<string, typeof Home> = {
   home: Home,
   book: BookOpen,
@@ -78,19 +68,14 @@ const initial: Pref = {
 };
 function Button({
   children,
-  onClick,
   secondary = false,
   className = "",
   ...rest
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { secondary?: boolean }) {
   return (
-    <button
-      className={`btn ${secondary ? "secondary" : ""} ${className}`}
-      onClick={onClick}
-      {...rest}
-    >
+    <AnimatedButton variant={secondary ? "secondary" : "primary"} className={className} {...rest}>
       {tr(children)}
-    </button>
+    </AnimatedButton>
   );
 }
 function Art({
@@ -157,6 +142,21 @@ export default function App() {
       before?.focus();
     };
   }, [modal]);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!menu) return;
+    document.getElementById("close-drawer")?.focus();
+    document.body.style.overflow = "hidden";
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenu(false);
+    };
+    document.addEventListener("keydown", h);
+    return () => {
+      document.removeEventListener("keydown", h);
+      document.body.style.overflow = "";
+      menuButton.current?.focus();
+    };
+  }, [menu]);
   setLanguage(pref.lang);
   const t = dictionary[pref.lang] || dictionary.en;
   function go(p: string) {
@@ -229,6 +229,9 @@ export default function App() {
             <button
               className="icon-button mobile-menu"
               aria-label={tr("Open navigation")}
+              aria-expanded={menu}
+              aria-controls="site-drawer"
+              ref={menuButton}
               onClick={() => setMenu(true)}
             >
               <Menu />
@@ -236,11 +239,19 @@ export default function App() {
           </div>
         </header>
         {tr(menu && (
-          <div className="drawer">
+          <div
+            className="drawer"
+            id="site-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label={tr("Main navigation")}
+            onKeyDown={trapFocus}
+          >
             <div className="row">
               <strong>{" "}{tr("Explore your journey")}{" "}</strong>
               <button
                 className="icon-button"
+                id="close-drawer"
                 aria-label={tr("Close navigation")}
                 onClick={() => setMenu(false)}
               >
@@ -248,7 +259,7 @@ export default function App() {
               </button>
             </div>
             {tr(nav.map((n) => (
-              <a href={"#" + n.id} key={n.id}>
+              <a href={"#" + n.id} key={n.id} aria-current={page === n.id ? "page" : undefined}>
                 <Icon name={n.icon} />
                 {tr(t[n.id])}
                 <ChevronRight />
@@ -256,286 +267,17 @@ export default function App() {
             )))}
             <a href="#reminders">
               <Bell />{" "}{tr("Reminder Center")}{" "}</a>
-            <a href="#auth">{" "}{tr("My profile")}{" "}</a>
+            <a href={user ? "#dashboard" : "#auth"}>
+              <Settings />{" "}{tr(user ? "My space" : "My profile")}{" "}</a>
           </div>
         ))}
       </>
-    );
-  }
-  function SectionTitle({
-    eyebrow,
-    title,
-    description,
-    action,
-    onClick,
-  }: {
-    eyebrow: string;
-    title: string;
-    description?: string;
-    action?: string;
-    onClick?: () => void;
-  }) {
-    return (
-      <div className="section-title">
-        <div>
-          <span className="eyebrow">{tr(eyebrow)}</span>
-          <h2>{tr(title)}</h2>
-          {tr(description && <p>{tr(description)}</p>)}
-        </div>
-        {tr(action && (
-          <button className="text-button" onClick={onClick}>
-            {tr(action)}
-            <ArrowRight size={17} />
-          </button>
-        ))}
-      </div>
-    );
-  }
-  function CourseCard({ c }: { c: (typeof courses)[0] }) {
-    return (
-      <article className="course-card">
-        <button
-          className="course-cover"
-          onClick={() => openCourse(c.id)}
-          aria-label={tr("Open " + c.title)}
-        >
-          <Art type={c.icon} color={c.color} />
-          <span className="pill">{tr(c.category)}</span>
-        </button>
-        <div className="course-info">
-          <div className="row muted tiny">
-            <span>{tr(c.level)}</span>
-            <span>{" "}{tr("3 lessons")}{" "}</span>
-          </div>
-          <h3>
-            <button className="plain" onClick={() => openCourse(c.id)}>
-              {tr(c.title)}
-            </button>
-          </h3>
-          <p>{tr(c.description)}</p>
-
-          <div className="row">
-            <span className="tiny muted">
-              {" "}{tr("Open learning path")}{" "}
-            </span>
-            <button
-              className="circle"
-              aria-label={tr("Explore " + c.title)}
-              onClick={() => openCourse(c.id)}
-            >
-              <ArrowRight size={18} />
-            </button>
-          </div>
-        </div>
-      </article>
     );
   }
   function Inspiration() { return <article className="inspiration"><span className="eyebrow">{" "}{tr("A MOMENT OF REFLECTION")}{" "}</span><div className="arabic" lang="ar" dir="rtl">{" "}{tr("رَّبِّ زِدْنِي عِلْمًا")}{" "}</div><h3>{" "}{tr("Asking for knowledge")}{" "}</h3><p>{" "}{tr("A beautiful reminder to keep a curious heart.")}{" "}</p><button className="btn secondary" onClick={()=>go('reader?surah=20&ayah=114')}>{" "}{tr("Read translation & context · 20:114 →")}{" "}</button></article>; }
   function PrayerCard() { return <PrayerWidget compact/>; }
   function HomePage() {
-    return (
-      <>
-        <section className="hero" dir={pref.lang === "en" ? "ltr" : "rtl"}>
-          <div className="hero-copy">
-            <div className="salaam" lang="ar" dir="rtl">{" "}{tr("السلام عليكم")}{" "}</div>
-            <span className="welcome">
-              <span /> {tr(t.welcome)}
-            </span>
-            <h1>
-              {tr(t.heading)}
-              <br />
-              <em>{tr(t.highlight)}</em>
-            </h1>
-            <p>{tr(t.description)}</p>
-            <div className="hero-buttons">
-              <Button onClick={() => go("learn")}>
-                {tr(t.start)}
-                <ArrowRight size={19} />
-              </Button>
-              <Button secondary onClick={() => go("quran")}>
-                <BookOpen size={19} />
-                {tr(t.explore)}
-              </Button>
-            </div>
-            <div className="hero-notes">
-              <span>
-                <Leaf size={16} />{" "}{tr("Learn at your pace")}{" "}</span>
-              <span>
-                <Heart size={16} />{" "}{tr("Grow with intention")}{" "}</span>
-            </div>
-          </div>
-          <div
-            className="hero-visual"
-            onPointerMove={(e) => {
-              if (
-                window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-                e.pointerType !== "mouse"
-              )
-                return;
-              const r = e.currentTarget.getBoundingClientRect();
-              e.currentTarget.style.setProperty(
-                "--mx",
-                `${(e.clientX - r.left - r.width / 2) / 55}px`,
-              );
-              e.currentTarget.style.setProperty(
-                "--my",
-                `${(e.clientY - r.top - r.height / 2) / 55}px`,
-              );
-            }}
-            onPointerLeave={(e) => {
-              e.currentTarget.style.setProperty("--mx", "0px");
-              e.currentTarget.style.setProperty("--my", "0px");
-            }}
-          >
-            <img
-              src="/haramain.webp"
-              alt={tr("Artistic 3D montage of the Kaaba in Makkah and the green dome of Al Masjid an Nabawi in Madinah, on separate architectural platforms")}
-              fetchPriority="high"
-              className="haramain-scene"
-            />
-            <div className="floating-note note-one">
-              <span className="note-icon mint">
-                <BookOpen size={19} />
-              </span>
-              <div>{" "}{tr("Makkah & Madinah")}{" "}<small>{" "}{tr("A connection that inspires.")}{" "}</small>
-              </div>
-            </div>
-            <div className="floating-note note-two">
-              <span>{" "}{tr("✦")}{" "}</span>{" "}{tr("Faith. Reflection. Discovery.")}{" "}</div>
-            <span className="orbit-star">{" "}{tr("✧")}{" "}</span>
-          </div>
-        </section>
-        <section className="quick-section">
-          <div className="row">
-            <span className="eyebrow">{" "}{tr("WHERE WILL YOUR JOURNEY TAKE YOU?")}{" "}</span>
-            <span className="tiny muted">{" "}{tr("One thoughtful step at a time")}{" "}</span>
-          </div>
-          <div className="quick-grid">
-            {tr([
-              {
-                name: "Read Quran",
-                id: "quran",
-                icon: "book",
-                color: "lilac",
-                sub: "Read. Reflect. Connect.",
-              },
-              {
-                name: "Learn Islam",
-                id: "learn",
-                icon: "graduation",
-                color: "mint",
-                sub: "Make room for knowledge",
-              },
-              {
-                name: "Daily Duas",
-                id: "duas",
-                icon: "heart",
-                color: "peach",
-                sub: "Words for every moment",
-              },
-              {
-                name: "Prayer Times",
-                id: "prayer",
-                icon: "compass",
-                color: "yellow",
-                sub: "Find your daily rhythm",
-              },
-              {
-                name: "Find sources",
-                id: "ai",
-                icon: "sparkles",
-                color: "sky",
-                sub: "Let curiosity lead the way",
-              },
-              {
-                name: "Quick Quiz",
-                id: "quiz",
-                icon: "star",
-                color: "pink",
-                sub: "A little discovery awaits",
-              },
-            ].map((c) => (
-              <button
-                className={"quick-card " + c.color}
-                key={c.id}
-                onClick={() => go(c.id)}
-              >
-                <span className="quick-icon">
-                  <Icon name={c.icon} size={29} />
-                </span>
-                <strong>{tr(c.name)}</strong>
-                <small>{tr(c.sub)}</small>
-                <ArrowRight size={17} />
-              </button>
-            )))}
-          </div>
-        </section>
-        <section className="two-col daily">
-          <Inspiration />
-          <PrayerCard />
-        </section>
-        <section>
-          <SectionTitle
-            eyebrow={tr("KNOWLEDGE, ONE STEP AT A TIME")}
-            title={tr("Find your next little discovery.")}
-            description={tr("Thoughtfully designed paths for wherever you are in your journey.")}
-            action={tr("Explore all learning paths")}
-            onClick={() => go("learn")}
-          />
-          <div className="course-grid">
-            {tr(courses.slice(0, 3).map((c) => (
-              <CourseCard key={c.id} c={c} />
-            )))}
-          </div>
-        </section>
-        <section className="ai-preview">
-          <div>
-            <span className="eyebrow">
-              <Sparkles size={16} />{" "}{tr("MEET YOUR LEARNING COMPANION")}{" "}</span>
-            <h2>{" "}{tr("Big questions.")}{" "}<br />{" "}{tr("A gentle place to begin.")}{" "}</h2>
-            <p>{" "}{tr("Search the Quran and Hadith library by word or phrase, then read the original context.")}{" "}</p>
-            <Button onClick={() => go("ai")}>{" "}{tr("Let’s explore together")}{" "}<ArrowRight size={18} />
-            </Button>
-            <small>{" "}{tr("Search verified texts · keep the source in view")}{" "}</small>
-          </div>
-          <div className="preview-chat">
-            <div className="row">
-              <span className="ai-avatar">
-                <Sparkles />
-              </span>
-              <div>
-                <strong>{" "}{tr("Source finder")}{" "}</strong>
-                <small>{" "}{tr("Your curious companion")}{" "}</small>
-              </div>
-              <span className="pill">{pref.lang==='en'?'EN':pref.lang==='ur'?'اردو':'العربية'}</span>
-            </div>
-            <p className="user-bubble">{" "}{tr("Where can I begin my learning journey?")}{" "}</p>
-            <div className="assistant-bubble">{" "}{tr("Start small, and make space for curiosity. A thoughtful question can be the beginning of something beautiful.")}{" "}<a
-                href="https://quran.com/20/114"
-                target="_blank"
-                rel="noreferrer"
-                className="citation"
-              >{" "}{tr("↗ Quran 20:114 · read in context")}{" "}</a>
-            </div>
-            <div className="chat-foot">{" "}{tr("A little guidance for your next step")}{" "}<Sparkles size={17} />
-            </div>
-          </div>
-        </section>
-        <section className="reminder-banner">
-          <div className="calendar-art">
-            <Calendar size={45} />
-            <span>{" "}{tr("✦")}{" "}</span>
-          </div>
-          <div>
-            <span className="eyebrow">{" "}{tr("SMALL MOMENTS. MEANINGFUL HABITS.")}{" "}</span>
-            <h2>{" "}{tr("A gentle nudge, just for you.")}{" "}</h2>
-            <p>{" "}{tr("Make time for what matters with your own reminder routine.")}{" "}</p>
-          </div>
-          <Button secondary onClick={() => go("reminders")}>{" "}{tr("Set a reminder")}{" "}<Bell size={17} />
-          </Button>
-        </section>
-      </>
-    );
+    return <HomeScreen go={go} lang={pref.lang} daily={<>{Inspiration()}{PrayerCard()}</>} />;
   }
   function Quran() { return <QuranExplorer notify={setToast}/>; }
   function Reader() { return <QuranReader notify={setToast}/>; }
@@ -631,22 +373,7 @@ export default function App() {
           aria-modal="true"
           aria-labelledby="modal-title"
           onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => {
-            if (e.key === "Tab") {
-              const f = e.currentTarget.querySelectorAll<HTMLElement>(
-                "button,input,select,textarea,a[href]",
-              );
-              const first = f[0],
-                last = f[f.length - 1];
-              if (e.shiftKey && document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-              } else if (!e.shiftKey && document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
-              }
-            }
-          }}
+          onKeyDown={trapFocus}
         >
           <button
             id="close-dialog"
@@ -700,7 +427,7 @@ export default function App() {
           document.getElementById("main")?.focus();
         }}
       >{" "}{tr("Skip to content")}{" "}</a>
-      <ReminderScheduler notify={setToast}/><Header />
+      <ReminderScheduler notify={setToast}/>{Header()}
       <main
         id="main"
         tabIndex={-1}
@@ -715,7 +442,7 @@ export default function App() {
           {tr(Screen())}
         </motion.div>
       </main>
-      <Footer />
+      {Footer()}
       <nav className="bottom-nav" aria-label={tr("Mobile navigation")}>
         {tr(nav
           .filter((n) =>
@@ -751,6 +478,22 @@ export default function App() {
       {tr(modal && Modal())}
     </MotionConfig></LanguageContext.Provider>
   );
+}
+// Keeps Tab / Shift+Tab inside an open dialog or drawer.
+function trapFocus(e: React.KeyboardEvent<HTMLElement>) {
+  if (e.key !== "Tab") return;
+  const f = e.currentTarget.querySelectorAll<HTMLElement>(
+    "button,input,select,textarea,a[href]",
+  );
+  const first = f[0],
+    last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
 }
 function locationHash() {
   return window.location.hash.slice(1).split("?")[0] || "home";

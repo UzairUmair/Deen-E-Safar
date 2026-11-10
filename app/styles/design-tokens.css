@@ -1,0 +1,244 @@
+/*
+ * Deen e Safar 2.0 identity: warm cream, premium navy, restrained antique gold.
+ * Loaded after globals.css / dark.css / features.css, so it is the final word on
+ * colour and shared components for every page (public and signed-in).
+ */
+:root {
+  --navy: #15233f;
+  --navy-ink: #14203a;
+  --gold: #b69a65;
+  --gold-soft: #d9c9a3;
+  --peach: #f4d5c3;
+  --lavender: #e9ddf2;
+  --turquoise: #8ad8d0;
+  --turquoise-deep: #2f8f88;
+  --cream: #faf8f2;
+  --ivory: #fffdf8;
+  --night: #0c1424;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --header-space: 91px;
+}
+/* :where keeps specificity equal to dark.css so the dark palette below still wins. */
+:root:where(:not([data-theme="dark"])) {
+  --bg: #faf8f2;
+  --surface: #fffdf8;
+  --ink: #14203a;
+  --muted: #6d7180;
+  --line: #e7e2d8;
+  --primary: #15233f;
+  --soft: #f3eee3;
+  --accent: #b69a65;
+  --accent-ink: #8a6f3c;
+  --shadow: 0 18px 46px rgba(20, 32, 58, 0.06);
+}
+[data-theme="dark"] {
+  --bg: #0e1626;
+  --surface: #162036;
+  --ink: #f3eee2;
+  --muted: #a9b0c2;
+  --line: #2a3654;
+  --primary: #d9c08a;
+  --soft: #1e2a45;
+  --accent: #d9c08a;
+  --accent-ink: #d9c08a;
+  --shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+}
+[data-theme="dark"] body {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+::selection {
+  background: var(--peach);
+  color: var(--navy-ink);
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Navigation ---------- */
+.header {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  box-shadow: 0 10px 34px rgba(20, 32, 58, 0.06);
+}
+[data-theme="dark"] .header {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border-color: var(--line);
+}
+.brand small,
+[data-theme="dark"] .brand small {
+  color: var(--accent-ink);
+}
+.header nav a {
+  position: relative;
+  color: var(--ink);
+}
+.header nav a:hover,
+.header nav a.active,
+[data-theme="dark"] .header nav a.active,
+[data-theme="dark"] .header nav a:hover {
+  background: transparent;
+  color: var(--ink);
+}
+.header nav a::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 1.5px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease);
+}
+.header nav a:hover::after,
+.header nav a.active::after {
+  transform: scaleX(1);
+}
+[dir="rtl"] .header nav a::after {
+  transform-origin: right;
+}
+.icon-button {
+  border-radius: 50%;
+}
+.drawer {
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+.drawer > a {
+  min-height: 56px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.drawer > a[aria-current="page"] {
+  color: var(--accent-ink);
+}
+[dir="rtl"] .drawer > a > svg:last-child {
+  margin-left: 0;
+  margin-right: auto;
+  transform: scaleX(-1);
+}
+.bottom-nav a.active {
+  background: var(--soft);
+  color: var(--ink);
+}
+
+/* ---------- Shared surfaces ---------- */
+.eyebrow {
+  color: var(--accent-ink);
+}
+.pill,
+.chip {
+  border-color: var(--line);
+}
+.arabic[lang="ar"],
+.inner-main .arabic {
+  font-family: "Amiri Quran", "Noto Naskh Arabic", serif;
+  color: var(--ink);
+}
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+.inspiration {
+  background: radial-gradient(90% 120% at 100% 0%, color-mix(in srgb, var(--peach) 42%, transparent), transparent 62%), var(--surface);
+  border-color: var(--line);
+}
+.inspiration h3 {
+  color: var(--ink);
+}
+
+/* ---------- Legacy jade accents re-pointed at the new palette (light theme) ---------- */
+:root:not([data-theme="dark"]) :is(.source, .text-button, .inline-link, .step, .notice, .circle, .pill, .selected, .chip.selected, .prayer-list .selected, .reminder-icon, .attribution, .ai-sidebar-note, .ai-sidebar-note p) {
+  color: var(--accent-ink);
+}
+:root:not([data-theme="dark"]) :is(.inspiration .arabic, .course-info h3, .reader-heading h1, .verse-card .arabic) {
+  color: var(--ink);
+}
+:root:not([data-theme="dark"]) :is(.inspiration > p, .next-prayer small) {
+  color: var(--muted);
+}
+:root:not([data-theme="dark"]) .next-prayer {
+  background: color-mix(in srgb, var(--turquoise) 26%, var(--surface));
+}
+:root:not([data-theme="dark"]) .lilac { background: var(--lavender); }
+:root:not([data-theme="dark"]) .mint { background: color-mix(in srgb, var(--turquoise) 30%, #fff); }
+:root:not([data-theme="dark"]) .peach { background: var(--peach); }
+:root:not([data-theme="dark"]) .yellow { background: color-mix(in srgb, var(--gold) 28%, #fff); }
+:root:not([data-theme="dark"]) .sky { background: #e3edf3; }
+:root:not([data-theme="dark"]) .pink { background: #f5e3e1; }
+:root:not([data-theme="dark"]) .clay-object {
+  background: linear-gradient(140deg, #fffdf8, #e6dcc6);
+  color: var(--navy);
+  box-shadow: inset 5px 5px 10px #ffffffb0, inset -6px -6px 12px rgba(20, 32, 58, 0.08), 10px 16px 14px rgba(20, 32, 58, 0.08);
+}
+:root:not([data-theme="dark"]) footer {
+  background-color: var(--surface);
+  background-image: linear-gradient(100deg, #fffdf8f2, #faf8f2f7), url("/geometry-gold.svg");
+}
+
+/* ---------- Quran Explorer & reader: navy type, turquoise controls, peach selection ---------- */
+.surah-number,
+:root:not([data-theme="dark"]) .surah-number {
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--turquoise) 34%, var(--surface));
+  color: var(--ink);
+  font-weight: 700;
+}
+.surah-card {
+  transition: border-color 0.25s, background 0.25s, transform 0.25s var(--ease);
+}
+:root:not([data-theme="dark"]) .surah-card:hover {
+  border-color: #e9bfa6;
+  background: color-mix(in srgb, var(--peach) 30%, var(--surface));
+}
+.verse-card .icon-button:hover {
+  background: color-mix(in srgb, var(--turquoise) 34%, var(--surface));
+}
+/* The listen bar stays docked under the header while reading. */
+.reader-audio {
+  position: sticky;
+  top: 104px;
+  z-index: 20;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 40px rgba(20, 32, 58, 0.1);
+}
+.reader-audio audio {
+  flex: 1;
+  min-width: 220px;
+  height: 40px;
+}
+@media (min-width: 768px) {
+  .reader-audio .btn {
+    width: auto;
+  }
+}
+@media (max-width: 767px) {
+  .reader-audio {
+    top: 88px;
+  }
+}

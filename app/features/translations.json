@@ -2446,5 +2446,201 @@
   "Times unavailable for this date and location": [
     "اس مقام اور تاریخ کے اوقات دستیاب نہیں",
     "المواقيت غير متاحة لهذا التاريخ والموقع"
+  ],
+  "A Journey of Faith & Knowledge": [
+    "ایمان اور علم کا سفر",
+    "رحلة إيمان ومعرفة"
+  ],
+  "Explore the Quran, deepen your understanding, and discover a more meaningful way to learn.": [
+    "قرآن کو دریافت کریں، اپنی سمجھ کو گہرا کریں، اور سیکھنے کا ایک زیادہ بامعنی طریقہ پائیں۔",
+    "استكشف القرآن، وعمّق فهمك، واكتشف طريقة أكثر معنى للتعلّم."
+  ],
+  "Start Exploring": [
+    "دریافت شروع کریں",
+    "ابدأ الاستكشاف"
+  ],
+  "Discover the Quran": [
+    "قرآن دریافت کریں",
+    "اكتشف القرآن"
+  ],
+  "FROM THE SHELF": [
+    "شیلف سے",
+    "من الرف"
+  ],
+  "Coming soon": [
+    "جلد آ رہا ہے",
+    "قريبًا"
+  ],
+  "Soon": [
+    "جلد",
+    "قريبًا"
+  ],
+  "Close": [
+    "بند کریں",
+    "إغلاق"
+  ],
+  "Books on the shelf": [
+    "شیلف پر موجود کتابیں",
+    "الكتب على الرف"
+  ],
+  "Islamic History": [
+    "اسلامی تاریخ",
+    "التاريخ الإسلامي"
+  ],
+  "Quran Studies": [
+    "علومِ قرآن",
+    "دراسات قرآنية"
+  ],
+  "A selected, sourced Hadith collection with Arabic text, translations, explanations, attribution, and grading.": [
+    "احادیث کا ایک منتخب اور باحوالہ مجموعہ، عربی متن، تراجم، تشریحات، حوالہ جات اور درجہ بندی کے ساتھ۔",
+    "مجموعة مختارة وموثّقة من الأحاديث مع النص العربي والترجمات والشروح والعزو والدرجة."
+  ],
+  "A dedicated Islamic history library has not been built yet. It will appear here once its content is sourced and reviewed.": [
+    "اسلامی تاریخ کی مخصوص لائبریری ابھی تیار نہیں ہوئی۔ اس کا مواد باحوالہ اور نظرِ ثانی شدہ ہونے کے بعد یہاں دستیاب ہوگا۔",
+    "لم تُنشأ بعد مكتبة خاصة بالتاريخ الإسلامي. ستظهر هنا بعد توثيق محتواها ومراجعته."
+  ],
+  "Open Duas & Hadith": [
+    "دعائیں اور احادیث کھولیں",
+    "افتح الأدعية والأحاديث"
+  ],
+  "Preparing the 3D library…": [
+    "تھری ڈی لائبریری تیار ہو رہی ہے…",
+    "جارٍ تجهيز المكتبة ثلاثية الأبعاد…"
+  ],
+  "Scroll to open the Quran": [
+    "قرآن کھولنے کے لیے اسکرول کریں",
+    "مرّر لفتح المصحف"
+  ],
+  "A cream and gold bookshelf holding four study books: Seerah, Hadith, Islamic History, and Quran Studies": [
+    "کریم اور سنہری رنگ کی کتابوں کی الماری جس میں مطالعے کی چار کتابیں ہیں: سیرت، حدیث، اسلامی تاریخ اور علومِ قرآن",
+    "رف كتب بلون كريمي وذهبي يضم أربعة كتب دراسية: السيرة، الحديث، التاريخ الإسلامي، ودراسات قرآنية"
+  ],
+  "An open Quran resting on a wooden rehal": [
+    "لکڑی کی رحل پر رکھا ہوا کھلا قرآن",
+    "مصحف مفتوح على رحل خشبي"
+  ],
+  "Explore the Words of Guidance": [
+    "کلامِ ہدایت کو دریافت کریں",
+    "استكشف كلمات الهداية"
+  ],
+  "Open Quran Explorer": [
+    "قرآن ایکسپلورر کھولیں",
+    "افتح مستكشف القرآن"
+  ],
+  "Surah previews": [
+    "سورتوں کی جھلک",
+    "معاينة السور"
+  ],
+  "The Opening": [
+    "آغاز",
+    "الفاتحة"
+  ],
+  "The Cow": [
+    "گائے",
+    "البقرة"
+  ],
+  "The Family of Imran": [
+    "آلِ عمران",
+    "آل عمران"
+  ],
+  "verses": [
+    "آیات",
+    "آيات"
+  ],
+  "EVERYTHING IN ONE PLACE": [
+    "سب کچھ ایک جگہ",
+    "كل شيء في مكان واحد"
+  ],
+  "Tools for a thoughtful journey": [
+    "ایک بامقصد سفر کے لیے سہولتیں",
+    "أدوات لرحلة متأنية"
+  ],
+  "Read, learn, and keep track of where you are, all in one calm space.": [
+    "پڑھیں، سیکھیں اور اپنی پیش رفت پر نظر رکھیں، سب ایک پُرسکون جگہ پر۔",
+    "اقرأ وتعلّم وتابع تقدّمك، كل ذلك في مساحة هادئة واحدة."
+  ],
+  "All 114 surahs with Arabic text, English and Urdu translations, search, bookmarks, and verse audio.": [
+    "تمام 114 سورتیں عربی متن، انگریزی اور اردو تراجم، تلاش، بک مارکس اور آیات کی آڈیو کے ساتھ۔",
+    "جميع السور الـ114 مع النص العربي والترجمتين الإنجليزية والأردية والبحث والإشارات المرجعية وتلاوة الآيات."
+  ],
+  "Islamic AI Assistant": [
+    "اسلامی اے آئی معاون",
+    "المساعد الإسلامي الذكي"
+  ],
+  "Source finder today · generated answers coming soon": [
+    "فی الحال ماخذ تلاش · تیار کردہ جوابات جلد آ رہے ہیں",
+    "حاليًا باحث المصادر · الإجابات المولّدة قريبًا"
+  ],
+  "Locally calculated prayer times for your city, with a Qibla bearing and a dhikr counter.": [
+    "آپ کے شہر کے لیے مقامی طور پر حساب کیے گئے اوقاتِ نماز، سمتِ قبلہ اور ذکر شمار کے ساتھ۔",
+    "مواقيت صلاة تُحسب محليًا لمدينتك، مع اتجاه القبلة وعدّاد للذكر."
+  ],
+  "Quranic supplications shown as complete verses, alongside a selected, sourced Hadith collection.": [
+    "قرآنی دعائیں مکمل آیات کی صورت میں، ساتھ احادیث کا ایک منتخب اور باحوالہ مجموعہ۔",
+    "أدعية قرآنية معروضة بآياتها كاملة، إلى جانب مجموعة مختارة وموثّقة من الأحاديث."
+  ],
+  "Interactive Learning": [
+    "تعاملی تعلیم",
+    "التعلّم التفاعلي"
+  ],
+  "Five introductory learning paths with lessons, reflection notes, and self-checks.": [
+    "پانچ تعارفی تعلیمی راستے، اسباق، غور و فکر کے نوٹس اور خود جانچ کے ساتھ۔",
+    "خمسة مسارات تعليمية تمهيدية مع دروس وملاحظات تأمل واختبارات ذاتية."
+  ],
+  "Bookmarks and Progress": [
+    "بک مارکس اور پیش رفت",
+    "الإشارات المرجعية والتقدّم"
+  ],
+  "Saved verses, reading positions, and lesson progress, kept privately in this browser.": [
+    "محفوظ آیات، مطالعے کے مقامات اور اسباق کی پیش رفت، جو صرف اسی براؤزر میں نجی طور پر رہتی ہیں۔",
+    "الآيات المحفوظة ومواضع القراءة وتقدّم الدروس، تبقى خاصة في هذا المتصفح."
+  ],
+  "ISLAMIC AI ASSISTANT": [
+    "اسلامی اے آئی معاون",
+    "المساعد الإسلامي الذكي"
+  ],
+  "Answers that keep the source in view": [
+    "ایسے جوابات جن میں ماخذ سامنے رہے",
+    "إجابات تُبقي المصدر أمامك"
+  ],
+  "Ask a question and go straight to the Quran and Hadith passages behind it.": [
+    "سوال پوچھیں اور سیدھے اس سے متعلق قرآن و حدیث کے مقامات تک پہنچیں۔",
+    "اطرح سؤالًا وانتقل مباشرة إلى مواضعه من القرآن والحديث."
+  ],
+  "Today the assistant works as a source finder over the bundled Quran and Hadith. Generated answers are not connected yet.": [
+    "فی الحال یہ معاون شامل شدہ قرآن و حدیث میں ماخذ تلاش کے طور پر کام کرتا ہے۔ تیار کردہ جوابات ابھی منسلک نہیں ہیں۔",
+    "يعمل المساعد حاليًا باحثًا عن المصادر في نصوص القرآن والحديث المضمّنة. الإجابات المولّدة غير موصولة بعد."
+  ],
+  "Explore Islamic AI": [
+    "اسلامی اے آئی دریافت کریں",
+    "استكشف المساعد الإسلامي الذكي"
+  ],
+  "Illustrative preview": [
+    "مثالی جھلک",
+    "معاينة توضيحية"
+  ],
+  "Which verse speaks about hearts finding rest?": [
+    "کون سی آیت دلوں کے اطمینان کے بارے میں ہے؟",
+    "أي آية تتحدث عن طمأنينة القلوب؟"
+  ],
+  "A verse often read on this theme:": [
+    "اس موضوع پر اکثر پڑھی جانے والی ایک آیت:",
+    "آية تُقرأ كثيرًا في هذا المعنى:"
+  ],
+  "Read in context": [
+    "سیاق میں پڑھیں",
+    "اقرأ في السياق"
+  ],
+  "Preview only. Verses are quoted from the bundled Quran text, not generated.": [
+    "صرف جھلک۔ آیات شامل شدہ قرآنی متن سے نقل کی گئی ہیں، تیار کردہ نہیں۔",
+    "معاينة فقط. الآيات منقولة من نص القرآن المضمّن وليست مولّدة."
+  ],
+  "Begin wherever you are": [
+    "جہاں ہیں وہیں سے آغاز کریں",
+    "ابدأ من حيث أنت"
+  ],
+  "Read, reflect, and learn at your own pace.": [
+    "اپنی رفتار سے پڑھیں، غور کریں اور سیکھیں۔",
+    "اقرأ وتدبّر وتعلّم على وتيرتك."
   ]
 }

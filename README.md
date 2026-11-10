@@ -4,7 +4,7 @@ A functional Islamic reading and learning website built with Next.js, React, Typ
 
 ## Run
 
-Run `npm install`, `npm run dev`, `npm run verify`, and `npm run build`. Development URL: http://127.0.0.1:3000. Production output: `out/`. Hosting identity is retained in `.openai/hosting.json`.
+Run `npm install`, `npm run dev`, `npm run verify`, and `npm run build`. With the site running, `npm run verify:ui` runs the browser checks (set `CHROME_PATH` if Chrome is not installed as a channel, and `BASE` to test another URL). Development URL: http://127.0.0.1:3000. Production output: `out/`. Hosting identity is retained in `.openai/hosting.json`.
 
 ## Features
 
@@ -32,9 +32,13 @@ Snapshots retrieved 23 October 2026 are retained in `content-source/`; bundled c
 
 ## Structure and design
 
-`app/page.tsx` is the shell/homepage. `app/features/` contains functional screens, storage validation, and localization. `translations.json` maps English UI and lesson text to Urdu/Arabic. `globals.css`, `dark.css`, and `features.css` provide ivory/jade and warm-charcoal/sage themes, responsive rules, and RTL layouts.
+`app/page.tsx` is the shell/homepage. `app/features/` contains functional screens, storage validation, and localization. `translations.json` maps English UI and lesson text to Urdu/Arabic. `globals.css`, `dark.css`, and `features.css` provide layout, responsive rules, and RTL layouts; `app/styles/design-tokens.css` sets the current cream/navy/gold palette (and a navy dark theme) on top of them.
 
-Logo SVGs retain the user-supplied crescent identity. `public/haramain.webp` is generated Makkah/Madinah artwork with CSS drift and pointer parallax, not a navigable WebGL model. Reduced-motion settings are respected. Fonts load from Google Fonts. No analytics, Firebase, Groq, external AI, or password authentication is connected.
+Logo SVGs retain the user-supplied crescent identity. Reduced-motion settings are respected. Fonts load from Google Fonts. No analytics, Firebase, Groq, external AI, or password authentication is connected.
+
+## Homepage 2.0
+
+The public homepage is a scroll-driven 3D story built with three.js, React Three Fiber, Drei and GSAP ScrollTrigger: an interactive bookshelf, a Quran that opens on a rehal as you scroll, and surah previews linking into the reader. All models and textures are procedural; the Quran model carries no text. 3D exists only on the homepage and loads lazily. Reduced motion, missing or software-only WebGL, data saver and low-memory devices get pre-rendered stills in normal page flow (`?3d=force` overrides the software-renderer check). Every `.btn` site-wide uses the diagonal sweep from `app/styles/animations.css`; new code should use `app/components/motion/AnimatedButton.tsx`. Design notes, the reference mapping and the verification record are in `docs/visual-reference-analysis.md`.
 
 ## Validation
 
