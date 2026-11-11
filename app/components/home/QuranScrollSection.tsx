@@ -52,24 +52,26 @@ export function QuranScrollSection({ go, rtl }: { go: (page: string) => void; rt
             trigger: ".story-track",
             start: "top top",
             end: "bottom bottom",
-            // Unsmoothed on purpose: overlay state always equals the scroll position, even on slow frames.
-            scrub: true,
-            onUpdate: (self) => {
-              story.target = self.progress;
-              invalidate.current();
-            },
+            // The story eases toward the scroll position instead of snapping to it, which
+            // absorbs mouse-wheel steps. Shorter on touch, where the finger is already smooth.
+            scrub: ScrollTrigger.isTouch === 1 ? 0.45 : 0.9,
           },
+        });
+        // One clock for everything: the 3D scene reads the timeline's own (smoothed) progress.
+        tl.eventCallback("onUpdate", () => {
+          story.target = tl.progress();
+          invalidate.current();
         });
         tl.to({}, { duration: 1 }, 0);
         tl.to(".scroll-cue", { autoAlpha: 0, duration: 0.03 }, 0.005);
-        tl.to(".hero-copy", { autoAlpha: 0, y: -48, duration: 0.1 }, 0.02);
-        tl.to(".shelf-ui", { autoAlpha: 0, y: -28, duration: 0.06 }, 0.02);
-        tl.to(".stage-night", { opacity: 1, duration: 0.2 }, 0.38);
-        tl.fromTo(".guide-copy", { autoAlpha: 0, y: 32 }, { autoAlpha: 1, y: 0, duration: 0.07 }, OPEN_END - 0.03);
-        tl.fromTo(".surah-preview", { autoAlpha: 0, y: 34, scale: 0.97 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.07, stagger: 0.028 }, OPEN_END + 0.07);
-        tl.to(".guide-body", { autoAlpha: 0, y: -28, duration: 0.06 }, 0.9);
-        tl.to(".stage-night", { opacity: 0, duration: 0.09 }, 0.9);
-        tl.to(".story-visual", { opacity: 0, duration: 0.07 }, 0.925);
+        tl.to(".hero-copy", { autoAlpha: 0, y: -56, duration: 0.11, ease: "power1.in" }, 0.015);
+        tl.to(".shelf-ui", { autoAlpha: 0, y: -28, duration: 0.07, ease: "power1.in" }, 0.015);
+        tl.to(".stage-night", { opacity: 1, duration: 0.24, ease: "sine.inOut" }, 0.35);
+        tl.fromTo(".guide-copy", { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.09, ease: "power2.out" }, OPEN_END - 0.04);
+        tl.fromTo(".surah-preview", { autoAlpha: 0, y: 36, scale: 0.97 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.09, stagger: 0.03, ease: "power2.out" }, OPEN_END + 0.05);
+        tl.to(".guide-body", { autoAlpha: 0, y: -28, duration: 0.07, ease: "power1.in" }, 0.89);
+        tl.to(".stage-night", { opacity: 0, duration: 0.1, ease: "sine.inOut" }, 0.89);
+        tl.to(".story-visual", { opacity: 0, duration: 0.08, ease: "sine.inOut" }, 0.915);
       }, root);
       revert = () => context.revert();
       root.current.dataset.timeline = "ready";

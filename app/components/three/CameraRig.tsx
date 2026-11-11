@@ -43,7 +43,43 @@ const TALL: Key[] = [
 ];
 
 const smooth = (t: number) => t * t * (3 - 2 * t);
-const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+
+/**
+ * Monotone cubic interpolation (PCHIP) through key values. Velocity is continuous across
+ * keys, so the camera glides through each pose instead of stopping at it, and a held
+ * value stays exactly held (no overshoot). It eases in and out at the two ends.
+ */
+function spline(xs: number[], ys: number[], x: number) {
+  const last = xs.length - 1;
+  if (x <= xs[0]) return ys[0];
+  if (x >= xs[last]) return ys[last];
+  let i = 0;
+  while (i < last - 1 && x > xs[i + 1]) i++;
+  const slope = (k: number) => (ys[k + 1] - ys[k]) / (xs[k + 1] - xs[k]);
+  const tangent = (k: number) => {
+    if (k === 0 || k === last) return 0;
+    const before = slope(k - 1);
+    const after = slope(k);
+    return before * after <= 0 ? 0 : (2 * before * after) / (before + after);
+  };
+  const h = xs[i + 1] - xs[i];
+  const t = (x - xs[i]) / h;
+  const t2 = t * t;
+  const t3 = t2 * t;
+  return (2 * t3 - 3 * t2 + 1) * ys[i] + (t3 - 2 * t2 + t) * h * tangent(i) + (-2 * t3 + 3 * t2) * ys[i + 1] + (t3 - t2) * h * tangent(i + 1);
+}
+
+const track = (keys: Key[]) => ({
+  keys,
+  p: keys.map((k) => k.p),
+  az: keys.map((k) => k.az),
+  el: keys.map((k) => k.el),
+  fx: keys.map((k) => k.fx),
+  fy: keys.map((k) => k.fy),
+  focus: [0, 1, 2].map((axis) => keys.map((k) => k.focus[axis])),
+});
+const WIDE_TRACK = track(WIDE);
+const TALL_TRACK = track(TALL);
 
 export function CameraRig({
   story,
@@ -88,9 +124,9 @@ export function CameraRig({
     const ease = 1 - Math.exp(-dt * 7);
     let moving = false;
 
-    story.p += (story.target - story.p) * ease;
-    if (Math.abs(story.target - story.p) < 0.0003) story.p = story.target;
-    else moving = true;
+    // The scroll timeline already smooths progress; following it exactly keeps the
+    // 3D scene and the DOM overlays on one clock.
+    story.p = story.target;
     story.open = Math.min(1, Math.max(0, (story.p - OPEN_START) / (OPEN_END - OPEN_START)));
 
     if (intro.current < 1) {
@@ -104,20 +140,19 @@ export function CameraRig({
     pt.sy += (pt.y - pt.sy) * ease;
     if (Math.abs(pt.x - pt.sx) + Math.abs(pt.y - pt.sy) > 0.002) moving = true;
 
-    const keys = tall ? TALL : WIDE;
-    let i = 0;
-    while (i < keys.length - 2 && story.p > keys[i + 1].p) i++;
-    const a = keys[i];
-    const b = keys[i + 1];
-    const t = smooth(Math.min(1, Math.max(0, (story.p - a.p) / (b.p - a.p))));
+    const path = tall ? TALL_TRACK : WIDE_TRACK;
+    const at = (values: number[]) => spline(path.p, values, story.p);
     const aspect = size.width / size.height;
-    const fit = (k: Key) => Math.max(k.width / (k.fw * VIEW * aspect), k.height / (k.fh * VIEW));
-    const distance = mix(fit(a), fit(b), t) * (1 + 0.07 * (1 - settle));
+    // Distance depends on the live canvas shape, so its key values are computed per frame.
+    const fit = path.keys.map((k) => Math.max(k.width / (k.fw * VIEW * aspect), k.height / (k.fh * VIEW)));
+    const distance = at(fit) * (1 + 0.07 * (1 - settle));
     const parallax = 1 - smooth(Math.min(1, story.p / 0.2));
-    const az = (mix(a.az, b.az, t) - 5 * (1 - settle) + pt.sx * 2.6 * parallax) * DEG;
-    const el = (mix(a.el, b.el, t) - pt.sy * 1.6 * parallax) * DEG;
+    const az = (at(path.az) - 5 * (1 - settle) + pt.sx * 2.6 * parallax) * DEG;
+    const el = (at(path.el) - pt.sy * 1.6 * parallax) * DEG;
+    const fx = at(path.fx);
+    const fy = at(path.fy);
 
-    focus.set(mix(a.focus[0], b.focus[0], t), mix(a.focus[1], b.focus[1], t), mix(a.focus[2], b.focus[2], t));
+    focus.set(at(path.focus[0]), at(path.focus[1]), at(path.focus[2]));
     camera.position.set(focus.x + distance * Math.sin(az) * Math.cos(el), focus.y + distance * Math.sin(el), focus.z + distance * Math.cos(az) * Math.cos(el));
     camera.lookAt(focus);
     camera.updateMatrix();
@@ -125,8 +160,8 @@ export function CameraRig({
     const { right, up } = scratch.current;
     right.setFromMatrixColumn(camera.matrix, 0);
     up.setFromMatrixColumn(camera.matrix, 1);
-    camera.position.addScaledVector(right, (rtl ? 1 : -1) * mix(a.fx, b.fx, t) * distance * VIEW * aspect);
-    camera.position.addScaledVector(up, -mix(a.fy, b.fy, t) * distance * VIEW);
+    camera.position.addScaledVector(right, (rtl ? 1 : -1) * fx * distance * VIEW * aspect);
+    camera.position.addScaledVector(up, -fy * distance * VIEW);
 
     // Whichever object has left the frame is not drawn at all.
     if (shelfRef.current) shelfRef.current.visible = story.p < 0.36;

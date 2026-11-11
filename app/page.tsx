@@ -1,7 +1,7 @@
 "use client";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ArrowRight, Bell, Bookmark, BookOpen, Check, ChevronRight, Compass, Globe, GraduationCap, Heart, Home, LayoutGrid, Menu, Moon, Settings, Sparkles, Star, Sun, X } from "lucide-react";
-import { motion, MotionConfig } from "motion/react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { DailyVerse } from "./components/dashboard/DailyVerse";
@@ -80,8 +80,21 @@ function Shell() {
   const screenKey = route.segments.join("/") || "home";
   useEffect(() => {
     setMenu(false);
-    window.scrollTo({ top: 0, behavior: "instant" });
   }, [screenKey]);
+
+  // Fetch the other screens once the page is idle, so a page change never waits on a download.
+  useEffect(() => {
+    if ((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) return;
+    const warm = () => {
+      for (const load of [() => import("./screens/Quran"), () => import("./screens/SurahReader"), () => import("./screens/PrayerTimes"), () => import("./screens/Duas"), () => import("./screens/Dashboard"), () => import("./screens/Bookmarks"), () => import("./screens/Preferences"), () => import("./screens/IslamicAI")]) load().catch(() => {});
+    };
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(warm, { timeout: 5000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const timer = setTimeout(warm, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!toast) return;
@@ -252,8 +265,19 @@ function Shell() {
             </div>
           )}
 
-          <main id="main" tabIndex={-1} className={isHome ? "home-main" : "inner-main"}>
-            <motion.div key={screenKey} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+          <main id="main" tabIndex={-1}>
+            {/* The old screen fades out where it is, the page returns to the top unseen, then the new one fades in. */}
+            <AnimatePresence mode="wait" onExitComplete={() => window.scrollTo({ top: 0, behavior: "instant" })}>
+              <motion.div
+                key={screenKey}
+                data-screen={screenKey}
+                // Layout class travels with the screen, so an exiting screen keeps its own layout.
+                className={isHome ? "home-main" : "inner-main"}
+                // No vertical shift on the homepage: its scroll story measures positions on mount.
+                initial={{ opacity: 0, y: isHome ? 0 : 12 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } }}
+                exit={{ opacity: 0, transition: { duration: 0.16, ease: "easeIn" } }}
+              >
               <Suspense
                 fallback={
                   <div className="app-screen" role="status">
@@ -264,7 +288,8 @@ function Shell() {
               >
                 {screen()}
               </Suspense>
-            </motion.div>
+              </motion.div>
+            </AnimatePresence>
           </main>
 
           <footer>
