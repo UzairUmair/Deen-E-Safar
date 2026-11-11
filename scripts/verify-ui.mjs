@@ -41,7 +41,8 @@ async function scrollStory(page, fraction) {
   }
   // Wait for the main thread to present a frame before reading state.
   await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
-  await page.waitForTimeout(500);
+  // The story eases toward the scroll position (up to 0.9s); let it settle.
+  await page.waitForTimeout(1800);
 }
 
 const visible = (page, selector) => page.evaluate((s) => [...document.querySelectorAll(s)].every((el) => getComputedStyle(el).visibility === "visible" && +getComputedStyle(el).opacity > 0.95), selector);
