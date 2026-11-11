@@ -352,8 +352,16 @@ await test("older screens still work: lesson completion reaches the dashboard, l
 /** Navigates within the app and waits until the screen has its heading and its data. */
 async function show(page, screen) {
   await page.goto(`${BASE}/#${screen}`);
-  await page.waitForFunction((hash) => location.hash === hash && document.querySelector("main h1") && !document.querySelector("main [role=status] .skeleton, main .skeleton-tile"), `#${screen}`);
-  await page.waitForTimeout(150);
+  // Page changes cross-fade: wait until the previous screen has left and only the new one remains.
+  const key = screen.replace(/^\//, "").split("?")[0];
+  await page.waitForFunction(
+    ([hash, k]) => {
+      const screens = document.querySelectorAll("main > [data-screen]");
+      return location.hash === hash && screens.length === 1 && screens[0].dataset.screen === k && getComputedStyle(screens[0]).opacity === "1" && document.querySelector("main h1") && !document.querySelector("main [role=status] .skeleton, main .skeleton-tile");
+    },
+    [`#${screen}`, key],
+  );
+  await page.waitForTimeout(100);
 }
 
 const SCREENS = ["/quran", "/quran/1", "/bookmarks", "/prayer", "/duas", "/duas/20-114", "/dashboard", "/preferences", "/ai", "/hadith"];

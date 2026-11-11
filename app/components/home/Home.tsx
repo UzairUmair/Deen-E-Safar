@@ -1,5 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
+import { RevealSection } from "../motion/RevealSection";
 import { AIShowcase } from "./AIShowcase";
 import { FinalCTA } from "./FinalCTA";
 import { LearningFeatures } from "./LearningFeatures";
@@ -11,7 +12,9 @@ export function Home({ go, lang, daily }: { go: (page: string) => void; lang: st
     <div className="home" dir={lang === "en" ? "ltr" : "rtl"}>
       <QuranScrollSection go={go} rtl={lang !== "en"} />
       <LearningFeatures />
-      <section className="home-section home-daily two-col daily">{daily}</section>
+      <RevealSection as="section" className="home-section home-daily two-col daily">
+        {daily}
+      </RevealSection>
       <AIShowcase go={go} lang={lang} />
       <FinalCTA go={go} />
     </div>

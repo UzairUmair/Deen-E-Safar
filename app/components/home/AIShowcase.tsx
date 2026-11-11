@@ -33,7 +33,7 @@ export function AIShowcase({ go, lang }: { go: (page: string) => void; lang: str
           {tr("Explore Islamic AI")}
         </AnimatedButton>
       </RevealSection>
-      <motion.div className="phone" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.35 }} transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}>
+      <motion.div className="phone" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
         <div className="phone-screen">
           <div className="phone-bar">
             <img src="/logo-mark.svg" alt="" width={30} height={28} />

@@ -120,7 +120,8 @@ drawer gained dialog semantics, focus trap, Escape, and focus return.
 
 ## 4. Scroll story
 
-One `ScrollTrigger` (unsmoothed scrub, native scrolling, no wheel hijacking) spans a
+One `ScrollTrigger` (native scrolling, no wheel hijacking; progress eases toward the scroll
+position over 0.9s, 0.45s on touch, and the camera follows a monotone spline through its poses) spans a
 sticky stage: 520vh on wide screens, 400svh on portrait. Its progress drives both the
 DOM timeline and the 3D scene.
 
