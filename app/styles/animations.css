@@ -131,7 +131,7 @@
   }
 }
 .hero-rise {
-  animation: hero-rise 0.7s var(--ease) both;
+  animation: hero-rise 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .hero-rise:nth-child(1) {
   animation-delay: 0.1s;

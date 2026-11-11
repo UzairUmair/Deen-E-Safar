@@ -34,10 +34,10 @@ export function LearningFeatures() {
         {features.map((f, i) => (
           <motion.li
             key={f.title}
-            initial={{ opacity: 0, y: 26 }}
+            initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.45, delay: (i % 3) * 0.08, ease: [0.22, 0.61, 0.36, 1] }}
+            viewport={{ once: true, amount: 0.2, margin: "0px 0px -6% 0px" }}
+            transition={{ duration: 0.8, delay: (i % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
             <a className="feature-card" href={link(f.route)}>
               <span className={`feature-icon ${f.tone}`} aria-hidden="true">
