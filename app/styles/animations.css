@@ -1,0 +1,187 @@
+/*
+ * Global diagonal sweep for every `.btn` on the site (AnimatedButton renders `.btn`,
+ * and older markup that uses the class directly inherits the same behaviour).
+ * A skewed layer slides in from the lower-left behind the label; only `transform`
+ * and `color` animate, so there is no layout shift and it stays on the compositor.
+ */
+.btn {
+  --btn-bg: var(--navy);
+  --btn-fg: #fff;
+  --btn-border: var(--gold);
+  --btn-sweep: var(--gold);
+  --btn-sweep-fg: var(--navy-ink);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1.5px solid var(--btn-border);
+  border-radius: 999px;
+  padding: 13px 26px;
+  box-shadow: none;
+  text-decoration: none;
+  cursor: pointer;
+  /* The label flips colour as the sweep crosses the middle of the button. */
+  transition: color 0.08s linear 0.05s, border-color 0.4s var(--ease), box-shadow 0.3s var(--ease);
+}
+.btn.secondary {
+  --btn-bg: var(--surface);
+  --btn-fg: var(--ink);
+  --btn-border: var(--gold-soft);
+  --btn-sweep: var(--navy);
+  --btn-sweep-fg: #fff;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1.5px solid var(--btn-border);
+}
+.btn.outline {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-border: var(--ink);
+  --btn-sweep: var(--navy);
+  --btn-sweep-fg: #fff;
+}
+[data-theme="dark"] .btn {
+  --btn-bg: #d9c08a;
+  --btn-fg: #14203a;
+  --btn-border: #d9c08a;
+  --btn-sweep: #fffdf8;
+  --btn-sweep-fg: #14203a;
+}
+[data-theme="dark"] .btn.secondary,
+[data-theme="dark"] .btn.outline {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-border: #56628a;
+  --btn-sweep: #d9c08a;
+  --btn-sweep-fg: #14203a;
+}
+.btn-sm {
+  min-height: 40px;
+  padding: 9px 18px;
+  font-size: 12px;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  /* Extra width covers the slant, so the skewed layer still fills the far corner. */
+  width: calc(100% + 4px + 2.6em);
+  background: var(--btn-sweep);
+  transform-origin: 0 100%;
+  transform: translate3d(-101%, 0, 0) skewX(32deg);
+  transition: transform 0.42s var(--ease);
+  pointer-events: none;
+}
+.btn > svg {
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease);
+}
+.btn:hover {
+  transform: none;
+  box-shadow: none;
+}
+@media (hover: hover) {
+  .btn:not(:disabled):hover {
+    color: var(--btn-sweep-fg);
+    border-color: var(--btn-sweep);
+  }
+  .btn:not(:disabled):hover::before {
+    transform: translate3d(0, 0, 0) skewX(32deg);
+  }
+  .btn:not(:disabled):hover > svg:last-child {
+    transform: translateX(4px);
+  }
+  [dir="rtl"] .btn:not(:disabled):hover > svg:last-child {
+    transform: scaleX(-1) translateX(4px);
+  }
+}
+/* Touch and keyboard presses get the same sweep, slightly quicker. */
+.btn:not(:disabled):active {
+  color: var(--btn-sweep-fg);
+  border-color: var(--btn-sweep);
+  transform: none;
+}
+.btn:not(:disabled):active::before {
+  transform: translate3d(0, 0, 0) skewX(32deg);
+  transition-duration: 0.26s;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+[dir="rtl"] .btn > svg.btn-arrow,
+[dir="rtl"] .btn > svg.lucide-arrow-right {
+  transform: scaleX(-1);
+}
+
+/* Hero type enters line by line. No base opacity: with animations off it is simply visible. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+}
+.hero-rise {
+  animation: hero-rise 0.7s var(--ease) both;
+}
+.hero-rise:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.hero-rise:nth-child(2) {
+  animation-delay: 0.22s;
+}
+.hero-rise:nth-child(3) {
+  animation-delay: 0.36s;
+}
+.hero-rise:nth-child(4) {
+  animation-delay: 0.5s;
+}
+@keyframes mote-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate3d(6px, -16px, 0);
+    opacity: 0.8;
+  }
+}
+@keyframes loading-pulse {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+@keyframes skeleton-sheen {
+  to {
+    background-position: -200% 0;
+  }
+}
+/* dark.css styles .btn with higher specificity; keep the sweep variables in charge. */
+[data-theme="dark"] .btn,
+[data-theme="dark"] .btn.secondary,
+[data-theme="dark"] .btn.outline {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border-color: var(--btn-border);
+  box-shadow: none;
+}
+@media (hover: hover) {
+  [data-theme="dark"] .btn:not(:disabled):hover {
+    color: var(--btn-sweep-fg);
+    border-color: var(--btn-sweep);
+  }
+}
+[data-theme="dark"] .btn:not(:disabled):active {
+  color: var(--btn-sweep-fg);
+}
